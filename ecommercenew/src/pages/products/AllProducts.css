@@ -1,0 +1,15 @@
+.allproductswrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 50px;
+    align-items: flex-end;
+}
+
+.allproducts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: space-evenly;
+    transition: 0.7s all;
+}

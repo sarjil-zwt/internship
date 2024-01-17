@@ -1,0 +1,82 @@
+.cartcard {
+    display: flex;
+    /* border: 1px solid red; */
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    transition: 0.2s all;
+    width: 730px;
+    background-color: white;
+}
+
+.ccprice {
+    color: #B12704;
+}
+
+.cartcard:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    transform: translateY(-1px);
+    z-index: 1000;
+}
+
+.ccimage {
+    height: 150px;
+    width: 150px;
+    /* border: 1px solid blue; */
+}
+
+
+.ccdetails {
+    width: 300px;
+}
+
+
+.ccbuttons {
+    display: flex;
+    gap: 0;
+}
+
+.ccdecbtn {
+    height: 34px;
+    width: 34px;
+    background-color: white;
+    border: 1px solid gray;
+    font-size: 20px;
+}
+
+.ccquantityinp {
+    height: 30px;
+    width: 40px;
+}
+
+.ccincbtn {
+    width: 34px;
+    height: 34px;
+    background-color: white;
+    border: 1px solid gray;
+    font-size: 20px;
+}
+
+
+.ccrmvbtn {
+    width: 24px;
+    height: 24px;
+    color: #B12704;
+    background-color: white;
+    border: 1px solid #B12704;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s all;
+    padding-block: 0px;
+    padding-inline: 0px;
+}
+
+.ccrmvbtn:hover {
+    background-color: #B12704;
+    color: white;
+}

@@ -1,0 +1,11 @@
+.addproductpage {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: auto;
+}
+
+
+.textfield {
+    margin: 0;
+}

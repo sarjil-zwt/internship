@@ -1,0 +1,127 @@
+.cartpage {
+    padding: 100px 50px;
+    display: flex;
+    width: 100%;
+    /* border: 1px solid blue; */
+}
+
+
+
+
+.cpcartitems {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: rgb(245, 245, 245);
+    border-radius: 10px 0 0 10px;
+
+    overflow: scroll;
+    /* border: 1px solid black; */
+
+
+}
+
+.cpcartitems::-webkit-scrollbar {
+    display: none;
+}
+
+
+.cartpagesummarydiv {
+    /* border: 1px solid red; */
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(233, 233, 233);
+    border-radius: 0 10px 10px 0;
+}
+
+
+.cpsinputdiv {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+}
+
+.cpsinputdiv>select {
+    height: 30px;
+}
+
+.cpsinputcpndiv {
+    display: flex;
+    /* border: 1px solid blue; */
+    width: 100%;
+    border: 1px solid gray;
+}
+
+.cpsinputcpndiv>input {
+    width: 100%;
+    height: 30px;
+    padding-block: 0px;
+    padding-inline: 0px;
+    border: none;
+    padding-left: 5px;
+}
+
+.cpsinputcpndiv>input:focus {
+    outline: none;
+}
+
+.cpsapplycouponbtn {
+    border: none;
+    background: none;
+    background-color: gray;
+    padding: 0px 10px;
+    color: white;
+}
+
+
+.cpstotal {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.cpscheckout {
+    width: 80%;
+    height: 30px;
+    background-color: black;
+    color: white;
+}
+
+.cpsdiscountindicatortext {
+    color: #429b6a;
+    /* background-color: white; */
+    font-size: 13px;
+    padding: 5px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: fit-content;
+}
+
+.cpsdiscountrmvbtn {
+    width: 14px;
+    height: 14px;
+    color: #B12704;
+    background-color: white;
+    border: 1px solid #B12704;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s all;
+    padding-block: 0px;
+    padding-inline: 0px;
+}
+
+.cpsdiscountrmvbtn:hover {
+    background-color: #B12704;
+    color: white;
+}
