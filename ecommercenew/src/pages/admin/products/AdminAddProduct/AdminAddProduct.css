@@ -1,0 +1,13 @@
+
+
+a.missingcategoryoption{
+    color: #1976d2;
+}
+
+.addproductpage{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    
+}

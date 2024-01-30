@@ -1,0 +1,105 @@
+
+
+.adminallproducts{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+    gap: 20px;
+}
+.aapttitle{
+    max-height: 100px;
+    width: 300px;
+    overflow-y: scroll;
+}
+
+
+.aapttitle::-webkit-scrollbar{
+    width: 7px;
+}
+
+.aapttitle::-webkit-scrollbar-track-piece{
+    display: none;
+}
+.aapttitle::-webkit-scrollbar-corner{
+    display: none;
+}
+
+.aapttitle::-webkit-scrollbar-thumb{
+    background-color: gray;
+    border-radius: 10px;
+    height: 20px;
+}
+.css-1xuwyf3-MuiTableCell-root{
+    max-height: 100px !important;
+}
+
+.description{
+    max-height: 100px;
+    width: 400px;
+    overflow-y: scroll;
+}
+
+.description::-webkit-scrollbar{
+    width: 7px;
+}
+
+.description::-webkit-scrollbar-track-piece{
+    display: none;
+}
+.description::-webkit-scrollbar-corner{
+    display: none;
+}
+
+.description::-webkit-scrollbar-thumb{
+    background-color: gray;
+    border-radius: 10px;
+    height: 20px;
+}
+
+
+
+.aapactionbtns{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+}
+
+.aaptablecontainer{
+    overflow-y: scroll;
+}
+
+
+.aaptablecontainer::-webkit-scrollbar{
+    width: 5px;
+}
+
+.aaptablecontainer::-webkit-scrollbar-track-piece{
+    display: none;
+}
+.aaptablecontainer::-webkit-scrollbar-corner{
+    display: none;
+}
+
+.aaptablecontainer::-webkit-scrollbar-thumb{
+    background-color: rgb(175, 175, 175);
+    border-radius: 10px;
+    height: 20px;
+}
+
+
+.css-apqrd9-MuiTableBody-root{
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.aapnoproductfounddiv{
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
