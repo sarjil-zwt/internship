@@ -61,15 +61,24 @@ const SidebarItemCollapse = ({ expanded, index, item, setExpanded }) => {
           <AccordionDetails
             sx={{
               padding: "0px",
+              paddingLeft: "30px",
             }}
           >
             <List>
               {item.child?.map((route, index) =>
                 route.sidebarProps ? (
                   route.child ? (
-                    <SidebarItemCollapse item={route} key={index} />
+                    <SidebarItemCollapse
+                      sx={{ paddingLeft: "30px" }}
+                      item={route}
+                      key={index}
+                    />
                   ) : (
-                    <SidebarItem item={route} key={index} />
+                    <SidebarItem
+                      sx={{ paddingLeft: "30px" }}
+                      item={route}
+                      key={index}
+                    />
                   )
                 ) : null
               )}

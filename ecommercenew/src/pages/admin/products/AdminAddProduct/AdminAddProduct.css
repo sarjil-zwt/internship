@@ -1,13 +1,21 @@
-
-
-a.missingcategoryoption{
-    color: #1976d2;
+a.missingcategoryoption {
+  color: #1976d2;
 }
 
-.addproductpage{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    
+.addproductpage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 50px;
+  gap: 30px;
+}
+
+.addproductdiv {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* border: 1px solid red; */
+  width: 100%;
+  max-width: 500px;
 }

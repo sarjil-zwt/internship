@@ -1,116 +1,104 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
-import MyProfile from "./pages/user/profile/MyProfile";
-import Addresses from "./pages/user/profile/Addresses";
-
-import AllUser from "./pages/admin/users/AllUser";
-// import CartPage from "./pages/cart/CartPage";
 import { useDispatch, useSelector } from "react-redux";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import SingleProduct from "./pages/user/products/SingleProduct/SingleProduct";
 import toast, { Toaster } from "react-hot-toast";
-import Login from "./features/login/Login";
-import SignUp from "./features/SignUp.jsx/SignUp";
-import AdminSidebar from "./components/Sidebar/AdminSidebar/AdminSidebar";
-import UserSidebar from "./components/Sidebar/UserSidebar/UserSidebar";
-import NotFound404 from "./pages/NotFound404/NotFound404";
 import axios from "axios";
 import { login } from "./redux/features/userSlice";
-import { useEffect, useState } from "react";
-import AdminAddProduct from "./pages/admin/products/AdminAddProduct/AdminAddProduct";
-import AddCategory from "./pages/admin/categories/AddCategory/AddCategory";
-import AdminDashboard from "./pages/admin/AdminDashboard/AdminDashboard";
-import AdminAllProducts from "./pages/admin/products/AdminAllProducts/AdminAllProducts";
-import AllProducts from "./pages/user/products/AllProducts/AllProducts";
+import Loader from "./components/loader/Loader";
+import { setCartState } from "./redux/features/cartSlice";
+import { setAddressesState } from "./redux/features/addressSlice";
+import Header from "./components/Header/Header";
+import { setGroupsState } from "./redux/features/groupSlice";
+import AllRoutes from "./routes/AllRoutes";
+import AdminSidebar from "./components/AdminSidebar/AdminSidebar";
 
 function App() {
   const userState = useSelector((state) => state.userState);
-  console.log(userState, "userState");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("/user/me")
-      .then((res) => {
-        setLoading(false);
-        dispatch(login(res.data));
-        localStorage.setItem("token", res.data.token);
-        toast.success("Login Successfull");
-        navigate("/");
-      })
-      .catch((err) => {
-        setLoading(false);
-        // dispatch(setLoading(false))
-        toast.error(err);
-      });
+    loadUser();
+    // navigate(localStorage.getItem("lastLocation"))
   }, []);
+
+  const loadUser = async () => {
+    try {
+      setLoading(true);
+
+      await axios
+        .get("/groups")
+        .then((res) => {
+          dispatch(setGroupsState(res.data.groups));
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.response.message || "Error");
+        });
+
+      await axios
+        .get("/user/me")
+        .then((res) => {
+          dispatch(login(res.data));
+          toast.success("Login Successful");
+        })
+        .catch((err) => {
+          console.log(err.response.data.message || "Error loading user");
+          toast.error("Please Login");
+          // navigate("/login"); // Programmatically navigate to the login page
+        });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userState.isLoggedIn) {
+      axios
+        .get("/cart")
+        .then((res) => {
+          dispatch(setCartState(res.data.cart));
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.response.message || "Error");
+        });
+
+      axios
+        .get("/addresses")
+        .then((res) => {
+          dispatch(setAddressesState(res.data.addresses));
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.response.message || "Error");
+        });
+    }
+  }, [userState.isLoggedIn]);
+
+  useEffect(() => {
+    localStorage.setItem("lastLocation", location.pathname);
+  }, [location]);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="App">
-      <Toaster position="bottom-right" />
-      {userState?.isLoggedIn && userState?.userState?.role == "user" && (
-        <UserSidebar />
-      )}
-      {userState?.isLoggedIn && userState?.userState?.role == "admin" && (
+      <Toaster position="top-right" containerStyle={{ zIndex: 10000000 }} />
+
+      {loading && <Loader />}
+
+      {userState?.isLoggedIn && userState?.userState?.eRole === "admin" && (
         <AdminSidebar />
       )}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <AllProducts />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
 
-        <Route path="/products" element={<AllProducts />} />
-
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/categories/add" element={<AddCategory />} />
-
-        <Route path="admin/product/">
-          <Route
-            path=":id"
-            element={
-              <ProtectedRoute>
-                <SingleProduct />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-
-        <Route
-          path="admin/products/add"
-          element={
-            <ProtectedRoute>
-              <AdminAddProduct />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="admin/products/all"
-          element={
-            <ProtectedRoute>
-              <AdminAllProducts />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="admin/users/all"
-          element={
-            <ProtectedRoute>
-              <AllUser />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="*" element={<NotFound404 />} />
-      </Routes>
+      <Header />
+      <AllRoutes />
     </div>
   );
 }

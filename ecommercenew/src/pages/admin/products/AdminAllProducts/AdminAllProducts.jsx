@@ -14,6 +14,7 @@ import {
   VisibilityOutlined,
   Edit,
   Delete,
+  ErrorOutline,
 } from "@mui/icons-material";
 import { Hidden, TextField, Typography } from "@mui/material";
 import "./AdminAllProducts.css";
@@ -21,20 +22,15 @@ import Loader from "../../../../components/loader/Loader";
 import ImageModal from "./ImageModal/ImageModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setProductsState } from "../../../../redux/features/productSlice";
+import assets from "../../../../assets/index";
+import CustomNotFound from "../../../../components/CustomNotFound/CustomNotFound";
+import EditProductModal from "./EditProductModal/EditProductModal";
 
 const AdminAllProducts = () => {
-  const columns = [
-    { id: "id", label: "Id", minWidth: 170 },
-    { id: "title", label: "Title", minWidth: 100 },
-    { id: "price", label: "Price", minWidth: 100 },
-    { id: "description", label: "Description", maxWidth: 200 },
-    { id: "imageclm", label: "Image", minWidth: 100 },
-    { id: "action", label: "Action", minWidth: 100 },
-  ];
-
   const [products, setProducts] = useState([]);
 
   const productState = useSelector((state) => state.productState);
+
   const dispatch = useDispatch();
   // State to track image visibility
   const [viewImage, setViewImage] = useState(false);
@@ -43,24 +39,32 @@ const AdminAllProducts = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [currentProduct, setCurrentProduct] = useState({});
+  const [editModal, setEditModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("/products")
-      .then((res) => {
-        dispatch(setProductsState(res.data.products));
-        setProducts(res.data.products);
-      })
-      .catch((err) => {
-        toast.error(
-          err.response.message || "Something went wrong in getting products"
-        );
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    async function loadproducts() {
+      await axios
+        .get("/products")
+        .then((res) => {
+          dispatch(setProductsState(res.data.products));
+          setProducts(res.data.products);
+        })
+        .catch((err) => {
+          toast.error(
+            err.response.message || "Something went wrong in getting products"
+          );
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+    loadproducts();
   }, []);
+
+  // console.log(products);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -76,9 +80,10 @@ const AdminAllProducts = () => {
     setViewImage(true);
   };
 
-  const handleEdit = (productId) => {
-    // Handle edit action
-    console.log("Edit product with ID:", productId);
+  const handleEdit = (product) => {
+    setCurrentProduct({ ...product });
+    setEditModal(true);
+    // console.log(currentProduct, ":::::::::::::::");
   };
 
   const handleDelete = (productId) => {
@@ -102,135 +107,185 @@ const AdminAllProducts = () => {
     setProducts(filteredResults);
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
-    <div className="adminallproducts">
-      <ImageModal
-        open={viewImage}
-        setOpen={setViewImage}
-        image={currentViewImage}
-      />
-      <Typography>All Products</Typography>
-      <Paper
-        sx={{
-          width: "80%",
-          overflow: "hidden",
-          display: "flex",
-          alignItems: "flex-end",
-          flexDirection: "column",
-        }}
-      >
-        <TextField
-          margin="normal"
-          sx={{
-            width: 400,
-          }}
-          label="search"
-          onChange={(e) => searchProduct(e)}
-        />
-        {products.length > 0 ? (
-          <TableContainer sx={{ height: "70vh" }} className="aaptablecontainer">
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Id</TableCell>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Price</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
+  const handleDeleteProduct = async (id) => {
+    setDeletingId(id);
+    await axios
+      .delete(`/products/${id}`)
+      .then((res) => {
+        toast.success(res.data.message);
+        setProducts(res.data.products);
+        dispatch(setProductsState(res.data.products));
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setDeletingId(null);
+      });
+  };
 
-              <TableBody>
-                {products
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((product) => {
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1}>
-                        <TableCell
-                          sx={{
-                            maxWidth: 100,
-                            overflow: "hidden",
-                          }}
-                        >
-                          {product.id}
-                        </TableCell>
-                        <TableCell sx={{ maxWidth: 500 }}>
-                          <p className="aapttitle">{product.title}</p>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            maxWidth: 200,
-                            overflow: "hidden",
-                          }}
-                        >
-                          {product.price}
-                        </TableCell>
-                        <TableCell sx={{ maxWidth: 700 }}>
-                          <p className="description">{product.description}</p>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            overflow: "hidden",
-                          }}
-                        >
-                          <VisibilityOutlined
-                            onClick={() => handleImageView(product.image)}
-                          />
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            overflow: "hidden",
-                          }}
-                        >
-                          <div className="aapactionbtns">
-                            <Edit
-                              sx={{
-                                color: "#1976d2",
-                                transition: "0.2s all",
-                                "&: hover": {
-                                  color: "#3c52b2",
-                                },
-                                cursor: "pointer",
-                              }}
-                            />
-                            <Delete
-                              sx={{
-                                color: "#ff5e5e",
-                                transition: "0.2s all",
-                                "&: hover": {
-                                  color: "#e35454",
-                                },
-                                cursor: "pointer",
-                              }}
-                            />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <div className="aapnoproductfounddiv">
-            <p>No Products Found</p>
-          </div>
-        )}
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={products.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+  return (
+    <div className="adminallproducts">
+      {loading ? (
+        <Loader size="3rem" />
+      ) : (
+        <>
+          <ImageModal
+            open={viewImage}
+            setOpen={setViewImage}
+            image={currentViewImage}
+          />
+          <EditProductModal
+            open={editModal}
+            setOpen={setEditModal}
+            p={{ ...currentProduct }}
+            setProducts={setProducts}
+          />
+          <Typography component="h1" variant="h5">
+            All Products
+          </Typography>
+          <Paper
+            sx={{
+              width: "80%",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "flex-end",
+              flexDirection: "column",
+              height: "80%",
+            }}
+          >
+            <TextField
+              margin="normal"
+              sx={{
+                width: 400,
+              }}
+              label="search"
+              onChange={(e) => searchProduct(e)}
+            />
+            <TableContainer
+              sx={{ height: "70vh" }}
+              className="aaptablecontainer"
+            >
+              {products.length > 0 ? (
+                <Table
+                  stickyHeader
+                  aria-label="sticky table"
+                  sx={{ borderBottom: "none" }}
+                >
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ textAlign: "center" }}>Id</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>Title</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>Price</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        Description
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        Category
+                      </TableCell>
+
+                      <TableCell sx={{ textAlign: "center" }}>Image</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    {products
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((product) => {
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={product.id}
+                          >
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {product.id}
+                            </TableCell>
+                            <TableCell
+                              sx={{ maxWidth: 400, textAlign: "justify" }}
+                            >
+                              <p className="aapttitle">{product.title}</p>
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {product.price}
+                            </TableCell>
+                            <TableCell
+                              sx={{ maxWidth: 400, textAlign: "justify" }}
+                            >
+                              <p className="description">
+                                {product.description}
+                              </p>
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {product.Category?.name || "-"}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              <VisibilityOutlined
+                                sx={{
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => handleImageView(product.image)}
+                              />
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              <div className="aapactionbtns">
+                                <Edit
+                                  sx={{
+                                    color: "#1976d2",
+                                    transition: "0.2s all",
+                                    "&: hover": {
+                                      color: "#3c52b2",
+                                    },
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => handleEdit({ ...product })}
+                                />
+                                {deletingId == product.id ? (
+                                  <Loader size="1rem" />
+                                ) : (
+                                  <Delete
+                                    sx={{
+                                      color: "#ff5e5e",
+                                      transition: "0.2s all",
+                                      "&: hover": {
+                                        color: "#e35454",
+                                      },
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                      handleDeleteProduct(product.id)
+                                    }
+                                  />
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              ) : (
+                <CustomNotFound message={"No products Found"} />
+              )}
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={products.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </>
+      )}
     </div>
   );
 };
-
 export default AdminAllProducts;

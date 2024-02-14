@@ -5,6 +5,10 @@ import {
   Button,
   Container,
   CssBaseline,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,14 +23,32 @@ import "./AddCategory.css";
 
 const AddCategory = () => {
   const [name, setName] = useState("");
+  const [group, setGroup] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get("/groups")
+      .then((res) => {
+        setGroups(res.data.groups);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
     await axios
       .post(
         `/categories`,
-        { name },
+        { vName: name, iGroupId: group },
         {
           headers: {
             "Content-Type": "application/json",
@@ -46,10 +68,13 @@ const AddCategory = () => {
         );
       });
   };
-  return loading ? (
-    <Loader />
-  ) : (
+
+  return (
     <div className="addcategory">
+      {loading && <Loader />}
+      <Typography component="h1" variant="h5">
+        Add Category
+      </Typography>
       <Container
         component="main"
         maxWidth="xs"
@@ -66,10 +91,40 @@ const AddCategory = () => {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
-            Add Category
-          </Typography>
           <Box noValidate sx={{ mt: 1 }}>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel id="demo-simple-select-helper-label">
+                Select Group
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                // value={age}
+                sx={{
+                  width: "100%",
+                }}
+                className="textfield"
+                defaultValue=""
+                label="Select Group"
+                onChange={(e) => setGroup(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {groups &&
+                  groups?.map((g) => {
+                    return <MenuItem value={g.id}>{g.vName}</MenuItem>;
+                  })}
+                <MenuItem value="">
+                  <Link
+                    className="missingcategoryoption"
+                    to="/admin/categories/add"
+                  >
+                    Missing Category? Add One
+                  </Link>
+                </MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               margin="normal"
               required

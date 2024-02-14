@@ -21,41 +21,49 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);
-    await axios
-      .post(
-        `/auth/signup`,
-        { name, email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setLoading(false);
-        dispatch(login(res.data));
-        localStorage.setItem("token", res.data.token);
-        toast.success("Registration Successfull");
-        navigate("/");
-      })
-      .catch((err) => {
-        setLoading(false);
-        // dispatch(setLoading(false))
-        toast.error(err);
+
+    console.log(image);
+    const formData = new FormData();
+
+    formData.append("vName", name);
+    formData.append("vEmail", email);
+    formData.append("vPassword", password);
+    formData.append("vImage", image);
+
+    // console.log(formData);
+
+    try {
+      const res = await axios.post(`/auth/signup`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+      console.log(res.data);
+      dispatch(login(res.data));
+      localStorage.setItem("token", res.data.token);
+      toast.success("Registration Successful");
+      navigate("/");
+    } catch (err) {
+      toast.error(err.response.data.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  return (
     <div className="login">
+      {loading && <Loader />}
       <Container
         component="main"
         maxWidth="xs"
@@ -111,6 +119,13 @@ const SignUp = () => {
               id="password"
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
+            />
+            <input
+              type="file"
+              name="vImage"
+              src={image}
+              onChange={handleImageChange}
+              alt=""
             />
             <Button
               type="submit"

@@ -1,118 +1,235 @@
-import React, { useState } from 'react'
-import CartProductCard from './CartProductCard'
-import { useDispatch, useSelector } from 'react-redux'
-import "./CartPage.css"
-import { setCartDiscount, setShipping } from '../../redux/features/cartSlice'
-import toast from 'react-hot-toast'
-
-
+import React, { useEffect, useState } from "react";
+import CartProductCard from "./CartProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import "./CartPage.css";
+import {
+  setCartDiscount,
+  setCartState,
+  setShipping,
+} from "../../../redux/features/cartSlice";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Delete } from "@mui/icons-material";
+import CustomNotFound from "../../../components/CustomNotFound/CustomNotFound";
+import Loader from "../../../components/loader/Loader";
 
 const discountCoupons = [
-    {
-        code: "SARJIL50",
-        discount: 50
-    },
-    {
-        code: "DIS40",
-        discount: 40
-    },
-    {
-        code: "DIS60",
-        discount: 60
-    },
-    {
-        code: "DIS10",
-        discount: 10
-    },
-]
+  {
+    code: "SARJIL50",
+    discount: 50,
+  },
+  {
+    code: "DIS40",
+    discount: 40,
+  },
+  {
+    code: "DIS60",
+    discount: 60,
+  },
+  {
+    code: "DIS10",
+    discount: 10,
+  },
+];
 
 const CartPage = () => {
+  const { cart } = useSelector((state) => state.cartState);
+  console.log(cart);
+  const [couponcode, setCouponcode] = useState("");
+  const [shippingTypes, setShippingTypes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const cartState = useSelector(state => state.cartState)
-    const [couponcode, setCouponcode] = useState("")
+  const dispatch = useDispatch();
+  // console.log(cartState)
 
-    const dispatch = useDispatch()
-    // console.log(cartState)
+  const [total, setTotal] = useState(cart.total);
 
-    const [total, setTotal] = useState(cartState.total)
+  const handleShippingChange = async (e) => {
+    setLoading(true);
+    await axios
+      .post("/cart/shipping/change", {
+        shippingid: e.target.value,
+      })
+      .then((res) => {
+        dispatch(setCartState({ ...res.data.cart }));
+      })
+      .catch((err) => {
+        console.log(err);
+        toast(err?.response?.message || "Something went wrong!!");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
+  useEffect(() => {
+    loadShippingTypes();
+    loadCart();
+  }, []);
 
-    const handleShippingChange = (e) => {
-        // setTotal(cartState.total + Number.parseInt(e.target.value))
-        dispatch(setShipping({ shipping: Number.parseInt(e.target.value) }))
-    }
+  const loadShippingTypes = async () => {
+    setLoading(true);
+    await axios
+      .get("/shippingtypes")
+      .then((res) => {
+        setShippingTypes(res.data.shippingTypes);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  const loadCart = async () => {
+    setLoading(true);
+    await axios
+      .get("/cart")
+      .then((res) => {
+        dispatch(setCartState({ ...res.data.cart }));
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Error getting cart");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-    const handleApplyDiscountCoupon = (e) => {
-        const discountObj = discountCoupons.find((c) => {
-            return c.code === couponcode
-        })
+  const handleApplyDiscountCoupon = async (e) => {
+    setLoading(true);
+    await axios
+      .post("/cart/discount/add", {
+        discountCode: couponcode,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setCouponcode("");
+        dispatch(setCartDiscount({ ...res.data.cart }));
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message || "Error adding discount");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-        if (discountObj) {
-            dispatch(setCartDiscount({ discount: discountObj.discount }))
-            toast.success("Discount Added")
-        } else {
-            toast.error("Coupon code not found")
-            setTotal(cartState.total)
-        }
-    }
+  const handleRemoveDiscount = async () => {
+    setLoading(true);
+    await axios
+      .delete("/cart/discount/remove")
+      .then((res) => {
+        toast.success(res.data.message);
+        dispatch(setCartState(res.data.cart));
+      })
+      .catch((err) => {
+        toast.success(err.response.data.message || "Something went wrong!!");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-
-    return (
-        <div className='cartpage'>
-            <div className="cpcartitems">
-                {cartState.products.map(item => {
-                    return <CartProductCard item={item} />
-                })}
-            </div>
-            <div className="cartpagesummarydiv">
-                <h3 className="cpsummarytitle">
-                    Summary
-                </h3>
-                <hr />
-
-                <div className="cpstotal">
-                    <p className="cpstotalitem">Items {cartState.products.length}</p>
-                    <p className="cpstotalamount">₹{(cartState.total).toFixed(2)}</p>
-
-                </div>
-
-                <div className="cpsinputdiv">
-                    <label htmlFor="">Shipping</label>
-                    <select name="shipping" id="" onChange={(e) => handleShippingChange(e)}>
-                        <option value={40}>Normal Time - 40rs</option>
-                        <option value={60}>Fast - 60rs</option>
-                        <option value={100}>Super Fast - 100rs</option>
-                    </select>
-                </div>
-
-                <div className="cpsinputdiv">
-                    <label htmlFor="">Coupon Code</label>
-                    <div className="cpsinputcpndiv">
-                        <input type="text" className="cpscoupon" onChange={e => setCouponcode(e.target.value)} />
-                        <button className="cpsapplycouponbtn" onClick={(e) => handleApplyDiscountCoupon(e)}>Apply</button>
-                    </div>
-                    {
-                        cartState.discount > 0 ? <p className="cpsdiscountindicatortext">
-                            Discount added - {cartState.discount} <button onClick={() => {
-                                dispatch(setCartDiscount({ discount: 0 }))
-                            }} className='cpsdiscountrmvbtn'>x</button>
-                        </p> : ""
-                    }
-                </div>
-
-
-                <div className="cpstotal">
-                    <p className="cpstotalitem">TOTAL PRICE</p>
-                    <p className="cpstotalamount">₹{cartState.total}</p>
-
-                </div>
-
-
-                <button className="cpscheckout">Checkout</button>
-
-            </div>
+  return (
+    <div className="cartpage">
+      <div className="cartpagewrapper">
+        {loading && <Loader />}
+        <div className="cpcartitems">
+          {cart?.CartItems?.length > 0 ? (
+            cart?.CartItems?.map((item) => {
+              return <CartProductCard item={item} />;
+            })
+          ) : (
+            <CustomNotFound message="No Products in cart" />
+          )}
         </div>
-    )
-}
 
-export default CartPage
+        {cart?.CartItems?.length > 0 ? (
+          <div className="cartpagesummarydiv">
+            <h3 className="cpsummarytitle">Summary</h3>
+            <hr />
+
+            <div className="cpstotal">
+              <p className="cpstotalitem">Items {cart?.CartItems?.length}</p>
+              <p className="cpstotalamount">₹{cart?.total?.toFixed(2)}</p>
+            </div>
+
+            <div className="cpsinputdiv">
+              <label htmlFor="">Shipping</label>
+              <select
+                name="shipping"
+                id=""
+                onChange={(e) => handleShippingChange(e)}
+                value={cart.ShippingTypeId}
+              >
+                {shippingTypes.map((st) => {
+                  return (
+                    <option value={st.id} key={st.id}>
+                      {st.name} - ₹{st.charge}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            <div className="cpsinputdiv">
+              <label htmlFor="">Coupon Code</label>
+              <div className="cpsinputcpndiv">
+                <input
+                  type="text"
+                  className="cpscoupon"
+                  value={couponcode}
+                  onChange={(e) => setCouponcode(e.target.value)}
+                />
+                <button
+                  className="cpsapplycouponbtn"
+                  onClick={(e) => handleApplyDiscountCoupon(e)}
+                >
+                  Apply
+                </button>
+              </div>
+              {cart.discount > 0 ? (
+                <p className="cpsdiscountindicatortext">
+                  Discount code added - {cart.discount}%{" "}
+                  <Delete
+                    onClick={handleRemoveDiscount}
+                    sx={{
+                      color: "#ff5e5e",
+                      height: "17px",
+                      transition: "0.2s all",
+                      "&: hover": {
+                        color: "#e35454",
+                      },
+                      cursor: "pointer",
+                    }}
+                  >
+                    x
+                  </Delete>
+                </p>
+              ) : (
+                ""
+              )}
+            </div>
+
+            <div className="cpstotal">
+              <p className="cpstotalitem">TOTAL PRICE</p>
+              <p className="cpstotalamount">₹{cart.total}</p>
+            </div>
+
+            <Link to="/checkout" className="cpscheckout">
+              Checkout
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CartPage;

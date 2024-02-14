@@ -2,13 +2,14 @@
     display: flex;
     /* border: 1px solid red; */
     justify-content: space-between;
-    width: 100%;
+    /* width: 70%; */
     align-items: center;
-    padding: 10px;
+    padding: 10px 30px;
     border-radius: 5px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     transition: 0.2s all;
-    width: 730px;
+    width: 800px;
+    height: 160px;
     background-color: white;
 }
 
@@ -22,9 +23,18 @@
     z-index: 1000;
 }
 
-.ccimage {
+
+.ccimgwrapper{
     height: 150px;
     width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ccimage {
+    max-height: 150px;
+    max-width: 150px;
+    
     /* border: 1px solid blue; */
 }
 
@@ -52,12 +62,13 @@
     width: 40px;
 }
 
-.ccincbtn {
+.ccquantitybtn {
     width: 34px;
     height: 34px;
     background-color: white;
     border: 1px solid gray;
     font-size: 20px;
+    cursor: pointer;
 }
 
 

@@ -1,0 +1,23 @@
+
+/* body{
+    overflow-y: scroll;
+} */
+::-webkit-scrollbar{
+    width: 7px;
+    margin-right: 5px;
+    /* display: none; */
+    /* position: absolute; */
+}
+
+::-webkit-scrollbar-track-piece{
+    display: none;
+}
+::-webkit-scrollbar-corner{
+    display: none;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgb(143, 143, 143);
+    border-radius: 10px;
+    height: 20px;
+}

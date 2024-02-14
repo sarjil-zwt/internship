@@ -38,7 +38,7 @@ const Login = () => {
     await axios
       .post(
         `/auth/login`,
-        { email, password },
+        { vEmail: email, vPassword: password },
         {
           headers: {
             "Content-Type": "application/json",
@@ -47,23 +47,22 @@ const Login = () => {
       )
       .then((res) => {
         console.log(res.data);
-        setLoading(false);
         dispatch(login(res.data));
         localStorage.setItem("token", res.data.token);
         toast.success("Login Successfull");
         navigate("/");
       })
       .catch((err) => {
+        toast.error(err.response.data.message || "Error in login");
+      })
+      .finally(() => {
         setLoading(false);
-        // dispatch(setLoading(false))
-        toast.error(err);
       });
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <div className="login">
+      {loading && <Loader />}
       <Container
         component="main"
         maxWidth="xs"

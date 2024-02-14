@@ -1,0 +1,75 @@
+
+
+.adminallcategories{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100%;
+    width: 100%;
+    padding-top: 50px;
+    gap: 20px;
+    border: 1px solid red;
+}
+.aacttitle{
+    max-height: 100px;
+    width: 300px;
+    overflow-y: scroll;
+    padding-inline: 5px;
+}
+
+
+.aacttitle::-webkit-scrollbar{
+    width: 5px;
+}
+
+.aacttitle::-webkit-scrollbar-track-piece{
+    display: none;
+}
+.aacttitle::-webkit-scrollbar-corner{
+    display: none;
+}
+
+.aacttitle::-webkit-scrollbar-thumb{
+    background-color: rgb(175, 175, 175);
+    border-radius: 10px;
+    height: 20px;
+}
+.css-1xuwyf3-MuiTableCell-root{
+    max-height: 100px !important;
+}
+
+.aacactionbtns{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+}
+
+.aactablecontainer{
+    overflow-y: scroll;
+}
+
+
+.aactablecontainer::-webkit-scrollbar{
+    width: 5px;
+}
+
+.aactablecontainer::-webkit-scrollbar-track-piece{
+    display: none;
+}
+.aactablecontainer::-webkit-scrollbar-corner{
+    display: none;
+}
+
+.aactablecontainer::-webkit-scrollbar-thumb{
+    background-color: rgb(175, 175, 175);
+    border-radius: 10px;
+    height: 20px;
+}
+
+
+.css-apqrd9-MuiTableBody-root{
+    /* width: 100% !important;
+    height: 100% !important; */
+}
+

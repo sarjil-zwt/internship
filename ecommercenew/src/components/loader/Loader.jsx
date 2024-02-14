@@ -1,13 +1,19 @@
-import { CircularProgress } from '@mui/material'
-import React from 'react'
-import "./Loader.css"
+import { CircularProgress } from "@mui/material";
+import React from "react";
+import "./Loader.css";
+import Lottie from "lottie-react";
+import bird from "./bird.json";
 
-const Loader = () => {
-    return (
-        <div className='loader'>
-            <CircularProgress />
-        </div>
-    )
-}
+const Loader = ({ size, position }) => {
+  return (
+    <div
+      className="loader"
+      style={{ position: position ? position : "absolute" }}
+    >
+      <Lottie animationData={bird} height="50px" className="loaderbird" />
+      {/* <CircularProgress size={size} /> */}
+    </div>
+  );
+};
 
-export default Loader
+export default Loader;

@@ -15,17 +15,10 @@ import { useSelector } from "react-redux";
 const ProductCard = ({ product }) => {
   const userState = useSelector((state) => state.userState);
   return (
-    <Link
-      to={
-        userState.userState.role == "admin"
-          ? `/admin/product/${product.id}`
-          : `/product/${product.id}`
-      }
-      className="productcard"
-    >
+    <Link to={`/product/${product.id}`} className="productcard">
       <div
         className="pcimgdiv"
-        style={{ backgroundImage: `url(${product.image})` }}
+        style={{ backgroundImage: `url(${product.vImage})` }}
       >
         {/* <img className='productcardimg' src={product.image} alt="" /> */}
         <div className="pcratings">
@@ -45,9 +38,9 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
 
-      <p className="pctitle">{product?.title}</p>
-      <p className="pcdescription">{product?.description}</p>
-      <p className="pcprice">₹{product?.price}</p>
+      <p className="pctitle">{product?.vTitle}</p>
+      <p className="pcdescription">{product?.tDescription}</p>
+      <p className="pcprice">₹{product?.fPrice}</p>
     </Link>
   );
 };

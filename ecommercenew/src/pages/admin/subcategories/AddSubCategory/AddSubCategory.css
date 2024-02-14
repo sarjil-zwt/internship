@@ -1,0 +1,19 @@
+.addsubcategory{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    padding-top: 100px;
+}
+
+
+.subcategoryinputswrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    gap: 20px;
+}
+

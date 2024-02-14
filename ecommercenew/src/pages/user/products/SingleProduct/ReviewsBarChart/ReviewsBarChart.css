@@ -1,0 +1,63 @@
+
+.barchartbaritem{
+    display: flex;
+    gap: 10px;
+    width: 80%;
+    align-items: center;
+}
+.barchartbar{
+    height: 30px;
+    /* width: 500px; */
+    min-width: 100%;
+    background-color: #F0F2F2;
+    /* border: 1px solid gray; */
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    border-radius: 5px;
+}
+
+.barchartbar>span{
+    height: 100%;
+    display: flex;
+    border-radius: 5px;
+
+}
+
+span.fill{
+    background-color: #FFA41C;
+    /* border: 1px solid red; */
+    height: 100%;
+    border-radius: 5px;
+    width: 100%;
+    animation: expandWidth 1s forwards;
+}
+
+@keyframes expandWidth {
+    from {
+      width: 0; /* Starting width */
+    }
+    to {
+      width: 100%; /* Ending width */
+    }
+  }
+
+.spreviewitemswrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+    /* border: 1px solid black; */
+    padding-inline: 10px;
+}
+
+.barchartbaritemleftlable{
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    color: #007185;
+}
+
+.barchartbaritemleftlable>svg{
+    /* color: #1976d2; */
+}

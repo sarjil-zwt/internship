@@ -1,0 +1,17 @@
+.selectaddressmodal{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    padding: 50px;
+    background-color: white;
+    height: 70vh;
+    overflow-y: scroll;
+    border-radius: 10px;
+}
+
+.selectaddressmodaladdresswrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

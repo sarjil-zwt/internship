@@ -1,105 +1,96 @@
-
-
-.adminallproducts{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    padding-top: 50px;
-    gap: 20px;
+.adminallproducts {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  padding-top: 50px;
+  /* border: 1px solid red; */
+  gap: 20px;
+  /* border: 1px solid red; */
 }
-.aapttitle{
-    max-height: 100px;
-    width: 300px;
-    overflow-y: scroll;
-}
+.aapttitle {
+  max-height: 100px;
 
-
-.aapttitle::-webkit-scrollbar{
-    width: 7px;
+  width: 100%;
+  overflow-y: scroll;
+  padding-inline: 5px;
+  text-align: justify;
 }
 
-.aapttitle::-webkit-scrollbar-track-piece{
-    display: none;
-}
-.aapttitle::-webkit-scrollbar-corner{
-    display: none;
+.aapttitle::-webkit-scrollbar {
+  width: 5px;
 }
 
-.aapttitle::-webkit-scrollbar-thumb{
-    background-color: gray;
-    border-radius: 10px;
-    height: 20px;
+.aapttitle::-webkit-scrollbar-track-piece {
+  display: none;
 }
-.css-1xuwyf3-MuiTableCell-root{
-    max-height: 100px !important;
+.aapttitle::-webkit-scrollbar-corner {
+  display: none;
 }
 
-.description{
-    max-height: 100px;
-    width: 400px;
-    overflow-y: scroll;
+.aapttitle::-webkit-scrollbar-thumb {
+  background-color: rgb(175, 175, 175);
+  border-radius: 10px;
+  height: 20px;
+}
+.css-1xuwyf3-MuiTableCell-root {
+  max-height: 100px !important;
 }
 
-.description::-webkit-scrollbar{
-    width: 7px;
+.description {
+  max-height: 100px;
+  width: 100%;
+  /* border: 1px solid red; */
+  overflow-y: scroll;
+  padding-inline: 5px;
 }
 
-.description::-webkit-scrollbar-track-piece{
-    display: none;
-}
-.description::-webkit-scrollbar-corner{
-    display: none;
+.description::-webkit-scrollbar {
+  width: 5px;
 }
 
-.description::-webkit-scrollbar-thumb{
-    background-color: gray;
-    border-radius: 10px;
-    height: 20px;
+.description::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.description::-webkit-scrollbar-corner {
+  display: none;
 }
 
-
-
-.aapactionbtns{
-    display: flex;
-    align-items: center;
-    gap: 30px;
-
+.description::-webkit-scrollbar-thumb {
+  background-color: rgb(175, 175, 175);
+  border-radius: 10px;
 }
 
-.aaptablecontainer{
-    overflow-y: scroll;
+.aapactionbtns {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  justify-content: center;
 }
 
-
-.aaptablecontainer::-webkit-scrollbar{
-    width: 5px;
+.aaptablecontainer {
+  overflow-y: scroll;
 }
 
-.aaptablecontainer::-webkit-scrollbar-track-piece{
-    display: none;
-}
-.aaptablecontainer::-webkit-scrollbar-corner{
-    display: none;
+.aaptablecontainer::-webkit-scrollbar {
+  width: 5px;
 }
 
-.aaptablecontainer::-webkit-scrollbar-thumb{
-    background-color: rgb(175, 175, 175);
-    border-radius: 10px;
-    height: 20px;
+.aaptablecontainer::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.aaptablecontainer::-webkit-scrollbar-corner {
+  display: none;
 }
 
-
-.css-apqrd9-MuiTableBody-root{
-    width: 100% !important;
-    height: 100% !important;
+.aaptablecontainer::-webkit-scrollbar-thumb {
+  background-color: rgb(175, 175, 175);
+  border-radius: 10px;
+  height: 20px;
 }
 
-.aapnoproductfounddiv{
-    height: 80vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.css-apqrd9-MuiTableBody-root {
+  width: 100% !important;
+  height: 100% !important;
 }

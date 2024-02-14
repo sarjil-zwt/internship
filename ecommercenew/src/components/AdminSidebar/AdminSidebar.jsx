@@ -1,20 +1,33 @@
-import { Avatar, Drawer, List, Stack, Toolbar } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import sizeConfigs from "../../../configs/sizeConfigs";
-import colorConfigs from "../../../configs/colorConfigs";
-import SidebarItemCollapse from "../SidebarItemCollapse";
-import SidebarItem from "../SidebarItem";
 import {
+  Avatar,
+  Drawer,
+  IconButton,
+  List,
+  Stack,
+  Toolbar,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import sizeConfigs from "../../configs/sizeConfigs";
+import colorConfigs from "../../configs/colorConfigs";
+import SidebarItemCollapse from "../Sidebar/SidebarItemCollapse";
+import SidebarItem from "../Sidebar/SidebarItem";
+import {
+  Add,
   CategoryOutlined,
+  ChevronLeftOutlined,
+  ChevronRightOutlined,
   DashboardOutlined,
+  GridViewOutlined,
   GroupAddOutlined,
   PersonOutline,
   ShoppingCartOutlined,
   StyleOutlined,
+  WorkspacesOutlined,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./AdminSidebar.css";
+import { useTheme } from "@emotion/react";
 
 const AdminSidebar = () => {
   const [expanded, setExpanded] = useState(false);
@@ -76,19 +89,49 @@ const AdminSidebar = () => {
       path: "/categories",
       sidebarProps: {
         displayText: "Categories",
-        icon: <CategoryOutlined />,
+        icon: <GridViewOutlined />,
       },
       child: [
+        {
+          path: "admin/groups/all",
+          sidebarProps: {
+            displayText: "All Groupes",
+            icon: <WorkspacesOutlined />,
+          },
+        },
+        {
+          path: "admin/groups/add",
+          sidebarProps: {
+            displayText: "Add Group",
+            icon: <Add />,
+          },
+        },
         {
           path: "admin/categories/all",
           sidebarProps: {
             displayText: "All Categories",
+            icon: <CategoryOutlined />,
           },
         },
         {
           path: "admin/categories/add",
           sidebarProps: {
             displayText: "Add Category",
+            icon: <Add />,
+          },
+        },
+        {
+          path: "admin/subcategories/all",
+          sidebarProps: {
+            displayText: "All SubCategory",
+            icon: <CategoryOutlined />,
+          },
+        },
+        {
+          path: "admin/subcategories/add",
+          sidebarProps: {
+            displayText: "Add Subcategory",
+            icon: <Add />,
           },
         },
       ],
@@ -118,7 +161,7 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <div className="sidebar">
+    <div className="adminsidebar">
       admin Sidebar
       <Drawer
         variant="permanent"

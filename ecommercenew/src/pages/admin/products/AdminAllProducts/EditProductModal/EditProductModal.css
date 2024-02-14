@@ -1,0 +1,8 @@
+.editmodaldiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    width: fit-content;
+    padding: 30px;
+}

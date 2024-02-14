@@ -1,126 +1,281 @@
 .singleproduct {
-    padding: 100px;
+  /* padding: 1rem; */
+  /* gap: 1rem; */
 
+  display: flex;
+  /* flex-direction: column; */
+  align-items: start;
+  /* border: 1px solid red; */
+  max-width: 100%;
+  /* border: 1px solid red; */
+  height: 100%;
+  /* gap: 100px; */
+  /* overflow-y: scroll; */
+  padding: 0px 30px 0 0;
+}
 
-    display: flex;
-    /* border: 1px solid red; */
-    width: 100%;
-    gap: 100px;
+.singleproduct::-webkit-scrollbar {
+  width: 5px;
+}
+
+.singleproduct::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.singleproduct::-webkit-scrollbar-corner {
+  display: none;
+}
+
+.singleproduct::-webkit-scrollbar-thumb {
+  background-color: rgb(175, 175, 175);
+  border-radius: 10px;
+  height: 20px;
 }
 
 .spimgdiv {
-
-    max-width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  /* border: 1px solid black; */
+  height: calc(100%-80px);
+  position: sticky;
+  top: 0; /* Make the image stick to the top of its container */
+  flex: 1;
+  min-height: 100vh;
 }
 
-.spimgdiv>img {
-    max-height: 600px;
-    width: 100%;
+.spimgdiv > img {
+  max-height: 600px;
+  /* width: 100%; */
+  max-width: 80%;
+  /* mix-blend-mode: multiply; */
+  filter: drop-shadow(
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px
+  );
 }
 
 .spdetailsdiv {
-    width: 50%;
-    /* border: 1px solid blue; */
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+  /* width: 50%; */
+  /* border: 1px solid blue; */
+  /* height: calc(100% - 70px); */
+  flex: 1.5;
+  padding: 60px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-top: 150px;
+  /* height: 100dvh; */
+  /* max-height: 100%; */
+  /* overflow-y: scroll; */
+  /* box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px; */
 }
 
-.sphead {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.spdetailsdiv::-webkit-scrollbar {
+  width: 5px;
+}
+
+.spdetailsdiv::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.spdetailsdiv::-webkit-scrollbar-corner {
+  display: none;
+}
+
+.spdetailsdiv::-webkit-scrollbar-thumb {
+  background-color: rgb(175, 175, 175);
+  border-radius: 10px;
+  height: 20px;
+}
+
+.spdetailsdivhead {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 h3.spproductname {
-    font-size: 24px !important;
-    line-height: 32px !important;
-    font-weight: 400;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  font-weight: 500;
+  text-decoration: underline;
 }
 
-
 .spratingsdiv {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 
-    /* border: 1px solid red; */
+  /* border: 1px solid red; */
+}
+
+.sprate {
+  font-size: 17px;
+}
+.sprate > span {
+  font-weight: 600;
 }
 
 .spmrpdiv {
-    display: flex;
-    color: #565959 !important;
-    font-size: 14px !important;
-    line-height: 20px !important;
-    gap: 10px;
+  display: flex;
+  color: #565959 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  gap: 10px;
 }
 
 .spprice {
-    font-size: 18px !important;
-    line-height: 24px !important;
-    color: #B12704;
+  font-size: 18px !important;
+  line-height: 24px !important;
+  color: #b12704;
 }
-
 
 .spdescription {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-.descriptionheading {
-    font-size: 17px !important;
-    line-height: 24px !important;
-    font-weight: 700;
+.spsubheading {
+  font-size: 20px !important;
+  line-height: 24px !important;
+  font-weight: 520;
 }
 
 .spbuttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-
 .spquantity {
-    display: flex;
-    width: 300px;
-    align-items: center;
-    justify-content: space-between;
-    height: 30px;
-    border: 1px solid gray;
-    border-radius: 7px;
-    background-color: white;
+  display: flex;
+  width: 300px;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  border: 1px solid gray;
+  border-radius: 7px;
+  background-color: white;
 }
 
 .spquantitydecbtn {
-    width: 100px;
-    height: 100%;
-    border: none;
-    border-radius: 7px 0 0 7px;
-    background-color: white;
-    font-size: 20px;
+  width: 100px;
+  height: 100%;
+  border: none;
+  border-radius: 7px 0 0 7px;
+  background-color: white;
+  font-size: 20px;
 }
 
 .spquantityincbtn {
-    width: 100px;
-    height: 100%;
-    border: none;
-    background-color: white;
+  width: 100px;
+  height: 100%;
+  border: none;
+  background-color: white;
 
-    border-radius: 0 7px 7px 0;
-    background-color: white;
-    font-size: 20px;
+  border-radius: 0 7px 7px 0;
+  background-color: white;
+  font-size: 20px;
 }
 
-
-
 .spaddtocartbtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 300px;
-    border-radius: 3px;
-    border: none;
-    background-color: #FFD814;
-    font-weight: 500;
-    height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  border-radius: 3px;
+  border: none;
+  background-color: #ffd814;
+  font-weight: 500;
+  height: 30px;
+}
+
+.spreviewsdiv {
+  /* border: 1px solid black; */
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  /* align-items: center; */
+}
+.spreviewsheadingdiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border: 1px solid red; */
+  /* padding: 30px 30px 30px 0; */
+  padding-right: 30px;
+}
+
+.spraddreviewbutton {
+  border: 1px solid #1976d2;
+  padding: 10px 15px;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.2s all;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.spraddreviewbutton:hover {
+  background-color: #1976d2;
+  color: white;
+}
+
+.reviewswrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.reviewcardswrapper {
+  /* padding: 20px; */
+  /* width: 50%; */
+  width: 100%;
+  /* border: 1px solid red; */
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.reviewsdivendbuttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.sprloadmore {
+  border: 1px solid gray;
+  padding: 10px 15px;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.2s all;
+  color: gray;
+  font-weight: 600;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.sprloadmore:hover {
+  background-color: gray;
+  color: white;
+}
+
+.fluid__image-container {
+  z-index: 1000;
+}
+
+.reviewschart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reviewschart {
+  /* border: 1px solid red; */
+  width: 100%;
 }

@@ -6,47 +6,43 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./AdminAddProduct.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../../../redux/features/productSlice";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const AdminAddProduct = () => {
   const [product, setProduct] = useState({
-    title: "",
-    price: 0,
-    description: "",
-    CategoryId: "",
-    image: "",
+    vTitle: "",
+    fPrice: 0,
+    tDescription: "",
+    iSubCategoryId: "",
+    vImage: "",
   });
 
-  const [categories, setCategories] = useState([]);
-  const dispatch = useDispatch();
+  const groupsState = useSelector((state) => state.groupsState);
 
-  useEffect(() => {
-    axios
-      .get("/categories")
-      .then((res) => {
-        setCategories(res.data.categories);
-        console.log(categories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const dispatch = useDispatch();
+  const [group, setGroup] = useState("");
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [groups, setGroups] = useState(groupsState.groups);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
   const handleSubmit = () => {
     console.log(product);
     if (
-      product.title == "" ||
-      product.description == "" ||
-      product.image == "" ||
-      product.price == 0 ||
-      product.CategoryId == ""
+      product.vTitle == "" ||
+      product.tDescription == "" ||
+      product.vImage == "" ||
+      product.fPrice == 0 ||
+      product.iSubCategoryId == ""
     ) {
       return toast.error("Please provide all details");
     }
@@ -67,15 +63,155 @@ const AdminAddProduct = () => {
       });
   };
 
+  const handleGroupChange = (v) => {
+    setGroup(v);
+    console.log(groups[v - 1]);
+    setCategories(groups[v - 1].Categories);
+    setSubcategories([]);
+  };
+
+  const handleCategoryChange = (v) => {
+    setCategory(v);
+    const category = categories.find((c) => c.id === v);
+    setSubcategories(category.SubCategories);
+  };
+
+  const handleAllAddSubmit = async () => {
+    const { data } = await axios.get("https://fakestoreapi.com/products");
+
+    data.map(async (p) => {
+      const category = categories.find((c) => {
+        return c.name.toLowerCase() === p.category;
+      });
+      console.log(category);
+      await axios
+        .post(
+          "/products",
+          {
+            title: p.title,
+            description: p.description,
+            price: p.price,
+            CategoryId: category.id,
+            image: p.image,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+          toast.error(err);
+        });
+    });
+
+    toast.success("All Products Added Successfully");
+  };
+
   return (
     <div className="addproductpage">
-      <Container
-        component="main"
-        maxWidth="sm"
-        sx={{
-          margin: 0,
-        }}
-      >
+      <Typography component="h1" variant="h5">
+        Add product
+      </Typography>
+      <div className="addproductdiv">
+        <FormControl sx={{ width: "100%" }}>
+          <InputLabel id="demo-simple-select-helper-label">
+            Select Group
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            // value={age}
+            sx={{
+              width: "100%",
+            }}
+            className="textfield"
+            defaultValue=""
+            label="Category"
+            onChange={(e) => handleGroupChange(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {groups?.map((g) => {
+              return <MenuItem value={g.id}>{g.vName}</MenuItem>;
+            })}
+            <MenuItem value="">
+              <Link className="missingcategoryoption" to="/admin/group/add">
+                Missing Group? Add One
+              </Link>
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ width: "100%" }}>
+          <InputLabel id="demo-simple-select-helper-label">Category</InputLabel>
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            // value={age}
+            sx={{
+              width: "100%",
+            }}
+            className="textfield"
+            defaultValue=""
+            label="Category"
+            onChange={(e) => handleCategoryChange(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {categories?.map((c) => {
+              return <MenuItem value={c.id}>{c.vName}</MenuItem>;
+            })}
+            <MenuItem value="">
+              <Link
+                className="missingcategoryoption"
+                to="/admin/categories/add"
+              >
+                Missing Category? Add One
+              </Link>
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ width: "100%" }}>
+          <InputLabel id="demo-simple-select-helper-label">
+            Sub Category
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            // value={age}
+            sx={{
+              width: "100%",
+            }}
+            className="textfield"
+            defaultValue=""
+            label="Category"
+            onChange={(e) =>
+              setProduct((product) => ({
+                ...product,
+                iSubCategoryId: e.target.value,
+              }))
+            }
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {subcategories?.map((sc) => {
+              return <MenuItem value={sc.id}>{sc.vName}</MenuItem>;
+            })}
+            <MenuItem value="">
+              <Link
+                className="missingcategoryoption"
+                to="/admin/categories/add"
+              >
+                Missing Sucategory? Add One
+              </Link>
+            </MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           margin="normal"
           required
@@ -86,8 +222,12 @@ const AdminAddProduct = () => {
           autoComplete="name"
           autoFocus
           className="textfield"
+          sx={{
+            mt: 0,
+            mb: 0,
+          }}
           onChange={(e) =>
-            setProduct((product) => ({ ...product, title: e.target.value }))
+            setProduct((product) => ({ ...product, vTitle: e.target.value }))
           }
         />
 
@@ -102,8 +242,12 @@ const AdminAddProduct = () => {
           autoComplete="price"
           autoFocus
           className="textfield"
+          sx={{
+            mt: 0,
+            mb: 0,
+          }}
           onChange={(e) =>
-            setProduct((product) => ({ ...product, price: e.target.value }))
+            setProduct((product) => ({ ...product, fPrice: e.target.value }))
           }
         />
 
@@ -117,12 +261,16 @@ const AdminAddProduct = () => {
           autoComplete="description"
           autoFocus
           className="textfield"
+          sx={{
+            mt: 0,
+            mb: 0,
+          }}
           multiline
           rows={5}
           onChange={(e) =>
             setProduct((product) => ({
               ...product,
-              description: e.target.value,
+              tDescription: e.target.value,
             }))
           }
         />
@@ -136,55 +284,41 @@ const AdminAddProduct = () => {
           name="image"
           autoComplete="image"
           className="textfield"
+          sx={{
+            mt: 0,
+            mb: 0,
+          }}
           onChange={(e) =>
-            setProduct((product) => ({ ...product, image: e.target.value }))
+            setProduct((product) => ({ ...product, vImage: e.target.value }))
           }
         />
 
-        <FormControl sx={{ width: "100%" }}>
-          <InputLabel id="demo-simple-select-helper-label">Category</InputLabel>
-          <Select
-            labelId="demo-simple-select-helper-label"
-            id="demo-simple-select-helper"
-            // value={age}
-            sx={{
-              width: "100%",
-            }}
-            className="textfield"
-            label="Category"
-            onChange={(e) =>
-              setProduct((product) => ({
-                ...product,
-                CategoryId: e.target.value,
-              }))
-            }
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {categories?.map((c) => {
-              return <MenuItem value={c.id}>{c.name}</MenuItem>;
-            })}
-            <MenuItem value="">
-              <Link
-                className="missingcategoryoption"
-                to="/admin/categories/add"
-              >
-                Missing Category? Add One
-              </Link>
-            </MenuItem>
-          </Select>
-        </FormControl>
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{
+            mt: 0,
+            mb: 0,
+          }}
           onClick={(e) => handleSubmit(e)}
         >
           Add Product
         </Button>
-      </Container>
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{
+            mt: 0,
+            mb: 0,
+          }}
+          onClick={handleAllAddSubmit}
+        >
+          Add All Product
+        </Button>
+      </div>
     </div>
   );
 };
