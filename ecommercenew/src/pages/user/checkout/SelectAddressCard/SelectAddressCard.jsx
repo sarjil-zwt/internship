@@ -5,14 +5,16 @@ const SelectAddressCard = ({ address }) => {
   return (
     <div className="selectaddresscard">
       <div className="sacheader">
-        <p className="sachname">{address.fullname}</p>
-        <p className="sachaddresstype">{address.addresstype}</p>
-        <p className="sacfphone">( {address.phone} )</p>
+        <p className="sachname">
+          {address.vFirstname} {address.vLastname}
+        </p>
+        <p className="sachaddresstype">{address.eAddressType}</p>
+        <p className="sacfphone">( {address.vPhone} )</p>
       </div>
       <div className="sacbody">
         <p className="sacbp">
-          {address.house},{address.area},{address.city},{address.state}-
-          {address.pincode}
+          {address.vHouse}, {address.vArea}, {address.vCity}, {address.vState} -{" "}
+          {address.vPincode}
         </p>
       </div>
       <div className="sacfooter"></div>

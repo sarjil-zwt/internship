@@ -1,63 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import CartProductCard from "./CartProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import "./CartPage.css";
 import {
   setCartDiscount,
   setCartState,
-  setShipping,
 } from "../../../redux/features/cartSlice";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Delete } from "@mui/icons-material";
 import CustomNotFound from "../../../components/CustomNotFound/CustomNotFound";
 import Loader from "../../../components/loader/Loader";
-
-const discountCoupons = [
-  {
-    code: "SARJIL50",
-    discount: 50,
-  },
-  {
-    code: "DIS40",
-    discount: 40,
-  },
-  {
-    code: "DIS60",
-    discount: 60,
-  },
-  {
-    code: "DIS10",
-    discount: 10,
-  },
-];
 
 const CartPage = () => {
   const { cart } = useSelector((state) => state.cartState);
   console.log(cart);
   const [couponcode, setCouponcode] = useState("");
   const [shippingTypes, setShippingTypes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   // console.log(cartState)
-
-  const [total, setTotal] = useState(cart.total);
 
   const handleShippingChange = async (e) => {
     setLoading(true);
     await axios
       .post("/cart/shipping/change", {
-        shippingid: e.target.value,
+        iShippingid: e.target.value,
       })
       .then((res) => {
         dispatch(setCartState({ ...res.data.cart }));
       })
       .catch((err) => {
         console.log(err);
-        toast(err?.response?.message || "Something went wrong!!");
+        toast(err?.response?.data.message || "Something went wrong!!");
       })
       .finally(() => {
         setLoading(false);
@@ -66,7 +43,8 @@ const CartPage = () => {
 
   useEffect(() => {
     loadShippingTypes();
-    loadCart();
+    // loadCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadShippingTypes = async () => {
@@ -139,13 +117,11 @@ const CartPage = () => {
       <div className="cartpagewrapper">
         {loading && <Loader />}
         <div className="cpcartitems">
-          {cart?.CartItems?.length > 0 ? (
-            cart?.CartItems?.map((item) => {
-              return <CartProductCard item={item} />;
-            })
-          ) : (
-            <CustomNotFound message="No Products in cart" />
-          )}
+          {cart?.CartItems?.length > 0
+            ? cart?.CartItems?.map((item) => {
+                return <CartProductCard item={item} />;
+              })
+            : !loading && <CustomNotFound message="No Products in cart" />}
         </div>
 
         {cart?.CartItems?.length > 0 ? (
@@ -155,7 +131,7 @@ const CartPage = () => {
 
             <div className="cpstotal">
               <p className="cpstotalitem">Items {cart?.CartItems?.length}</p>
-              <p className="cpstotalamount">₹{cart?.total?.toFixed(2)}</p>
+              <p className="cpstotalamount">₹{cart?.fTotal?.toFixed(2)}</p>
             </div>
 
             <div className="cpsinputdiv">
@@ -164,12 +140,12 @@ const CartPage = () => {
                 name="shipping"
                 id=""
                 onChange={(e) => handleShippingChange(e)}
-                value={cart.ShippingTypeId}
+                value={cart.iShippingTypeId}
               >
                 {shippingTypes.map((st) => {
                   return (
                     <option value={st.id} key={st.id}>
-                      {st.name} - ₹{st.charge}
+                      {st.vName} - ₹{st.fCharge}
                     </option>
                   );
                 })}
@@ -192,9 +168,9 @@ const CartPage = () => {
                   Apply
                 </button>
               </div>
-              {cart.discount > 0 ? (
+              {cart.fDiscount > 0 ? (
                 <p className="cpsdiscountindicatortext">
-                  Discount code added - {cart.discount}%{" "}
+                  Discount code added - {cart.fDiscount}%{" "}
                   <Delete
                     onClick={handleRemoveDiscount}
                     sx={{
@@ -217,10 +193,10 @@ const CartPage = () => {
 
             <div className="cpstotal">
               <p className="cpstotalitem">TOTAL PRICE</p>
-              <p className="cpstotalamount">₹{cart.total}</p>
+              <p className="cpstotalamount">₹{cart.fTotal}</p>
             </div>
 
-            <Link to="/checkout" className="cpscheckout">
+            <Link to="/profile/checkout" className="cpscheckout">
               Checkout
             </Link>
           </div>

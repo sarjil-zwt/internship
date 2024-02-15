@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../../components/loader/Loader";
 import "./Profile.css";
+import { setCartState } from "../../../redux/features/cartSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Profile = () => {
       .get("/auth/logout")
       .then((res) => {
         dispatch(logout());
+        dispatch(setCartState({}));
         navigate("/");
         toast.success(res.data.message);
       })

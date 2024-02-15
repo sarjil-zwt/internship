@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Checkout.css";
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-  Elements,
-} from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
-import Loader from "../../../components/loader/Loader";
 import StripePaymentComponent from "./StripePaymentComponent/StripePaymentComponent";
 import {
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
-  FormLabel,
-  IconButton,
   Menu,
   MenuItem,
   Radio,
@@ -26,14 +16,8 @@ import {
 import { useSelector } from "react-redux";
 import SelectAddressCard from "./SelectAddressCard/SelectAddressCard";
 import SelectAddressModal from "./SelectAddressModal/SelectAddressModal";
-import {
-  Close,
-  CopyAllOutlined,
-  DoneAllOutlined,
-  Edit,
-  Flag,
-  MoreVert,
-} from "@mui/icons-material";
+import { Close, CopyAllOutlined, DoneAllOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const addressState = useSelector((state) => state.addressState);
@@ -42,19 +26,16 @@ const Checkout = () => {
   const [billingAddress, setBillingAddress] = useState({});
   const [sameAsShipping, setSameAsShipping] = useState(false);
   const [addresstype, setAddressType] = useState(-1);
-  const [cardnumber, setCardnumber] = useState("4000003560000008");
+  const [cardnumber] = useState("4000003560000008");
   const [copied, setCopied] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
 
   useEffect(() => {
     setShippingAddress(addressState.addresses[0]);
     setBillingAddress(addressState.addresses[0]);
   }, [addressState]);
-
-  // useEffect(() => {
-  //   setCopied(false);
-  // }, [anchorEl]);
 
   const handleCheckboxChange = () => {
     setSameAsShipping((sameAsShipping) => !sameAsShipping);
@@ -151,12 +132,27 @@ const Checkout = () => {
           <div className="addressselect">
             <div className="addressselectheader">
               <p>Select Shipping Address:</p>
-              <button
-                onClick={() => handleMenuOpen(1)}
-                className="ashchangebtn"
-              >
-                Change Address
-              </button>
+
+              <div className="cpaddressbuttons">
+                <button
+                  onClick={() => {
+                    navigate(
+                      "/profile/addresses?redirect=profile/checkout&open=true"
+                    );
+                  }}
+                  className="ashchangebtn"
+                >
+                  Add Address
+                </button>
+                {addressState.addresses.length >= 2 && (
+                  <button
+                    onClick={() => handleMenuOpen(1)}
+                    className="ashchangebtn"
+                  >
+                    Change Address
+                  </button>
+                )}
+              </div>
             </div>
 
             <RadioGroup className="addressesradiogrp">
@@ -172,13 +168,24 @@ const Checkout = () => {
           <div className="addressselect">
             <div className="addressselectheader">
               <p>Select Billing Address:</p>
+
               {!sameAsShipping && (
-                <button
-                  onClick={() => handleMenuOpen(2)}
-                  className="ashchangebtn"
-                >
-                  Change Address
-                </button>
+                <div className="cpaddressbuttons">
+                  <button
+                    onClick={() => handleMenuOpen(1)}
+                    className="ashchangebtn"
+                  >
+                    Add Address
+                  </button>
+                  {addressState.addresses.length >= 2 && (
+                    <button
+                      onClick={() => handleMenuOpen(1)}
+                      className="ashchangebtn"
+                    >
+                      Change Address
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 

@@ -3,31 +3,26 @@ import ProductCard from "../../../../components/ProductCard/ProductCard";
 import axios from "axios";
 import "./AllProducts.css";
 import Loader from "../../../../components/loader/Loader";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setProductsState } from "../../../../redux/features/productSlice";
-import { Pagination, TextField } from "@mui/material";
-import { TablePagination } from "@mui/base";
 import CustomNotFound from "../../../../components/CustomNotFound/CustomNotFound";
-import { useParams, useSearchParams } from "react-router-dom";
-import useQuery from "../../../../hooks/useQuery";
-import Lottie from "lottie-react";
-import bird from "../../../../components/loader/bird.json";
+import { useSearchParams } from "react-router-dom";
 
 const AllProducts = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
 
-  const productState = useSelector((state) => state.productState);
   const dispatch = useDispatch();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [pageNo, setPageNo] = useState(1);
 
   const [completedProducts, setCompletedProducts] = useState(false);
 
   const [loadingMore, setLoadingMore] = useState(false);
+
   useEffect(() => {
-    pageNo == 1 && setLoading(true);
+    pageNo === 1 && setLoading(true);
     const subcategory = searchParams.get("subcategory");
     const category = searchParams.get("category");
     const search = searchParams.get("search");
@@ -38,6 +33,7 @@ const AllProducts = () => {
       (search ? `&search=${search}` : "") +
       `&pageNo=${pageNo}` +
       `&limit=${20}`;
+
     axios
       .get(url)
       .then((res) => {
@@ -63,29 +59,15 @@ const AllProducts = () => {
     setPageNo(1);
     setProducts([]);
     setCompletedProducts(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
-
-  const searchProduct = (e) => {
-    e.preventDefault();
-
-    const filteredResults = productState.products.filter((item) => {
-      const { title, description, Category } = item;
-      const lowercaseSearch = e.target.value;
-      return (
-        title.toLowerCase().includes(lowercaseSearch) ||
-        description.toLowerCase().includes(lowercaseSearch) ||
-        Category?.name.toLowerCase().includes(lowercaseSearch)
-      );
-    });
-    setProducts(filteredResults);
-  };
 
   return (
     <div className="allproductswrapper">
       {loading && <Loader />}
 
       <div className="allproductsproductswrapper">
-        {products.length >= 1 ? (
+        {products.length > 0 ? (
           <div>
             <div className="allproducts">
               {products.map((p) => (
@@ -113,7 +95,7 @@ const AllProducts = () => {
             </div>
           </div>
         ) : (
-          <CustomNotFound message={"No Product Found"} />
+          !loading && <CustomNotFound message={"No Product Found"} />
         )}
       </div>
     </div>

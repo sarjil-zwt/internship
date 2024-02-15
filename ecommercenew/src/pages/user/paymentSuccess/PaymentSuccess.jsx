@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PaymentSuccess.css";
 import { useNavigate } from "react-router-dom";
-import assets from "../../../assets";
 import Lottie from "lottie-react";
 import payment from "./paymentsuccessanimationdata.json";
 
@@ -16,6 +15,7 @@ const PaymentSuccess = () => {
     } else {
       navigate("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -24,12 +24,14 @@ const PaymentSuccess = () => {
     }, 1000);
 
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time]);
 
   useEffect(() => {
     if (time <= 0) {
       navigate("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time]);
 
   return (
@@ -38,7 +40,7 @@ const PaymentSuccess = () => {
         <Lottie animationData={payment} />
         <p className="pspthankyou">Thank you !!</p>
         <p>Payment Successfull</p>
-        <p>{time}</p>
+        <p>Redirecting you in - {time}s</p>
       </div>
       <div className="paymentsummary">
         <div className="pspaymentdetails">

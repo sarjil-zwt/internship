@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,19 +16,20 @@ import AdminSidebar from "./components/AdminSidebar/AdminSidebar";
 function App() {
   const userState = useSelector((state) => state.userState);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const navigate = useNavigate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadUser();
     // navigate(localStorage.getItem("lastLocation"))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log("userState=======", userState);
 
   const loadUser = async () => {
     try {
-      setLoading(true);
-
       await axios
         .get("/groups")
         .then((res) => {
@@ -50,10 +51,10 @@ function App() {
           toast.error("Please Login");
           // navigate("/login"); // Programmatically navigate to the login page
         });
-
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,17 +80,18 @@ function App() {
           toast.error(err.response.message || "Error");
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userState.isLoggedIn]);
 
   useEffect(() => {
+    console.log(userState.isLoggedIn, ":: userState.isLoggedIn");
     localStorage.setItem("lastLocation", location.pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="App">
-      <Toaster position="top-right" containerStyle={{ zIndex: 10000000 }} />
+      <Toaster position="bottom-right" containerStyle={{ zIndex: 10000000 }} />
 
       {loading && <Loader />}
 
@@ -98,7 +100,7 @@ function App() {
       )}
 
       <Header />
-      <AllRoutes />
+      <AllRoutes loading={loading} />
     </div>
   );
 }

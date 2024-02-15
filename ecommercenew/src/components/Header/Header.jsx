@@ -1,26 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import {
   FavoriteBorderOutlined,
   LocalMallOutlined,
-  Person,
+  LogoDev,
   PersonOutline,
-  SearchOffOutlined,
-  SearchOutlined,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import assets from "../../assets";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import { Avatar, Badge } from "@mui/material";
+import Searchbar from "./SearchBar/Searchbar";
+import ProfileAccountMenu from "./ProfileAccountMenu/ProfileAccountMenu";
 
 const Header = () => {
-  const [inputFocused, setInputFocused] = useState(false);
   const [content, setContent] = useState([]);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const [searchComponent, setSearchComponent] = useState(false);
-  const [searchData, setSearchData] = useState({});
+  const cartState = useSelector((state) => state.cartState);
 
   const data = useSelector((state) => state.groupsState);
+  const userState = useSelector((state) => state.userState);
 
   const handleMouseOver = (category) => {
     setContent(data.groups[category]);
@@ -32,26 +31,20 @@ const Header = () => {
     setCategoriesOpen(false);
   };
 
-  const handleSearchInputChange = async (e) => {
-    if (e.target.value.length >= 3) {
-      setSearchComponent(true);
+  const location = useLocation();
 
-      await axios
-        .get(`/search/header?query=${e.target.value}`)
-        .then((res) => {
-          console.log(res.data);
-          setSearchData(res.data);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      setSearchComponent(false);
-    }
-  };
+  useEffect(() => {
+    setCategoriesOpen(false);
+  }, [location.pathname]);
 
+  console.log(userState?.userState?.vImage);
+  const image = userState?.userState?.vImage;
   return (
     <header className="header">
       <div className="headerleft">
-        <img src={assets.images.logo} alt="" className="headerlogo" />
+        <Link to="/">
+          <img src={assets.images.logo} alt="" className="headerlogo" />
+        </Link>
         <div
           className="headersupercategorieslist"
           onMouseLeave={handleMouseLeave}
@@ -75,91 +68,73 @@ const Header = () => {
             Beauty
           </Link>
 
-          {content && (
+          <div
+            className={`floatingDivwrapper  ${categoriesOpen ? "open" : ""}`}
+          >
             <div
-              className={`floatingDivwrapper  ${
-                categoriesOpen ? "open" : "hidden"
-              }`}
+              className={`floatingcategorieslistdiv  ${
+                categoriesOpen ? "open" : ""
+              } `}
+              onMouseLeave={handleMouseLeave}
             >
-              <div className="floatingcategorieslistdiv">
-                <div className="floatingcategorieslistdivinnner">
-                  {content?.Categories?.map((c) => {
-                    return (
-                      <div className="contentcategorydiv">
-                        <Link
-                          to={`/products?category=${c.id}`}
-                          className="contentcategory"
-                        >
-                          {c.vName}
-                        </Link>
-                        {c.SubCategories.map((sc) => {
-                          return (
-                            <Link
-                              to={`/products?category=${c.id}&subcategory=${sc.id}`}
-                              className="contentsubcategory"
-                            >
-                              {sc.vName}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="floatingcategorieslistdivinnner">
+                {content?.Categories?.map((c) => {
+                  return (
+                    <div className="contentcategorydiv">
+                      <Link
+                        to={`/products?category=${c.id}`}
+                        className="contentcategory"
+                      >
+                        {c.vName}
+                      </Link>
+                      {c.SubCategories.map((sc) => {
+                        return (
+                          <Link
+                            to={`/products?category=${c.id}&subcategory=${sc.id}`}
+                            className="contentsubcategory"
+                          >
+                            {sc.vName}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       <div className="headerright">
-        <div
-          className={`headerrightsearchinputwrapper ${
-            inputFocused === true ? "focused" : ""
-          }`}
-        >
-          <SearchOutlined />
-          <input
-            type="text"
-            placeholder="Search for products, brands and more"
-            className="headerrightsearchinput"
-            onFocus={() => setInputFocused(true)}
-            onBlur={() => {
-              setInputFocused(false);
-              setSearchComponent(false);
-            }}
-            onChange={(e) => handleSearchInputChange(e)}
-          />
-
-          <div
-            className={
-              searchComponent ? "searchcomponentopen" : "searchcomponentclose"
-            }
-          >
-            {searchData &&
-              searchData?.subcategories?.map((sc) => {
-                return (
-                  <Link
-                    to={`/products?category=${sc.iCategoryId}&subcategory=${sc.id}`}
-                  >
-                    {sc.vName}
-                  </Link>
-                );
-              })}
-          </div>
-        </div>
+        <Searchbar />
         <div className="headerrightlogoitemswrapper">
-          <Link to="/profile" className="headerlogoitem">
-            <PersonOutline className="headerlogoitemlogo" />
-            <p className="headerlogoitemtxt">Profile</p>
-          </Link>
+          {userState.isLoggedIn ? (
+            <ProfileAccountMenu />
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
           <Link to="/" className="headerlogoitem">
             <FavoriteBorderOutlined className="headerlogoitemlogo" />
             <p className="headerlogoitemtxt">Wishlist</p>
           </Link>
-          <Link to="/cart" className="headerlogoitem">
-            <LocalMallOutlined className="headerlogoitemlogo" />
-            <p className="headerlogoitemtxt">Cart</p>
-          </Link>
+          {userState.isLoggedIn ? (
+            <Link to="/profile/cart" className="headerlogoitem">
+              <Badge
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                badgeContent={cartState?.cart?.CartItems?.length}
+                overlap="circular"
+                color="primary"
+              >
+                <LocalMallOutlined className="headerlogoitemlogo" />
+              </Badge>
+              <p className="headerlogoitemtxt">Cart</p>
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </header>

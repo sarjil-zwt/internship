@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { login, logout } from "../../redux/features/userSlice";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
+import Loader from "../loader/Loader";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ loading }) => {
   const userState = useSelector((state) => state.userState);
-  const [loading, setLoading] = useState(false);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   loadUser();
-  // }, []);
-
-  const loadUser = async () => {};
-
-  return <Outlet />;
+  if (!loading) {
+    return userState.isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
+  } else {
+  }
 };
 
 export default ProtectedRoute;

@@ -31,7 +31,9 @@ const SingleProduct = () => {
   useEffect(() => {
     loadProduct();
     // loadReviews();
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id]);
 
   const loadProduct = async () => {
     setLoading(true);

@@ -16,27 +16,32 @@ import Loader from "../../../../components/loader/Loader";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addAddress } from "../../../../redux/features/addressSlice";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const AddAddressModal = ({ open, setOpen }) => {
   const handleClose = () => setOpen(false);
   const [address, setAddress] = useState({
-    fullname: "",
-    phone: "",
-    pincode: "",
-    state: "",
-    city: "",
-    house: "",
-    area: "",
-    addresstype: "Home",
+    vFirstname: "",
+    vLastname: "",
+    vPhone: "",
+    vPincode: "",
+    vState: "",
+    vCity: "",
+    vHouse: "",
+    vArea: "",
+    eAddressType: "HOME",
   });
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [searchparams] = useSearchParams();
 
   const handlePinCodeChange = async (e) => {
     const newPincode = e.target.value;
     setAddress((address) => ({
       ...address,
-      pincode: newPincode,
+      vPincode: newPincode,
     }));
 
     if (newPincode.length === 6) {
@@ -50,7 +55,7 @@ const AddAddressModal = ({ open, setOpen }) => {
             toast.error("Invalid Pincode");
             setAddress((address) => ({
               ...address,
-              pincode: "",
+              vPincode: "",
             }));
             return;
           }
@@ -59,8 +64,8 @@ const AddAddressModal = ({ open, setOpen }) => {
 
           setAddress((address) => ({
             ...address,
-            state: res.data[0].PostOffice[0].State,
-            city: res.data[0].PostOffice[0].Name,
+            vState: res.data[0].PostOffice[0].State,
+            vCity: res.data[0].PostOffice[0].Name,
           }));
           console.log(address);
         })
@@ -79,13 +84,14 @@ const AddAddressModal = ({ open, setOpen }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      address.fullname == "" ||
-      address.phone == "" ||
-      address.area == "" ||
-      address.city == "" ||
-      address.pincode == "" ||
-      address.state == "" ||
-      address.house == ""
+      address.vFirstname === "" ||
+      address.vLastname === "" ||
+      address.vPhone === "" ||
+      address.vArea === "" ||
+      address.vCity === "" ||
+      address.vPincode === "" ||
+      address.vState === "" ||
+      address.vHouse === ""
     ) {
       return toast.error("Please provide all details");
     }
@@ -100,15 +106,20 @@ const AddAddressModal = ({ open, setOpen }) => {
         toast.success("address added successfully!");
         dispatch(addAddress(res.data.newAddress));
         setAddress({
-          fullname: "",
-          phone: "",
-          pincode: "",
-          state: "",
-          city: "",
-          house: "",
-          area: "",
+          vFirstname: "",
+          vLastname: "",
+          vPhone: "",
+          vPincode: "",
+          vState: "",
+          vCity: "",
+          vHouse: "",
+          vArea: "",
           addresstype: "",
         });
+
+        if (searchparams.get("redirect")) {
+          navigate("/" + searchparams.get("redirect"));
+        }
       })
       .catch((err) => {
         toast.error(err.response.data.message || "Something went wrong");
@@ -138,19 +149,38 @@ const AddAddressModal = ({ open, setOpen }) => {
             margin="normal"
             required
             fullWidth
-            id="fullname"
-            label="FullName (Required)"
-            name="fullname"
-            autoComplete="fullname"
+            id="firstname"
+            label="Firstname (Required)"
+            name="firstname"
+            autoComplete="firstname"
             autoFocus
             // className="textfield"
             onChange={(e) =>
               setAddress((address) => ({
                 ...address,
-                fullname: e.target.value,
+                vFirstname: e.target.value,
               }))
             }
-            value={address.fullname}
+            value={address.vFirstname}
+          />
+
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="lastname"
+            label="Lastname (Required)"
+            name="lastname"
+            autoComplete="lastname"
+            autoFocus
+            // className="textfield"
+            onChange={(e) =>
+              setAddress((address) => ({
+                ...address,
+                vLastname: e.target.value,
+              }))
+            }
+            value={address.vLastname}
           />
 
           <TextField
@@ -167,10 +197,10 @@ const AddAddressModal = ({ open, setOpen }) => {
             onChange={(e) =>
               setAddress((address) => ({
                 ...address,
-                phone: e.target.value,
+                vPhone: e.target.value,
               }))
             }
-            value={address.phone}
+            value={address.vPhone}
           />
           <div className="doubleimputswrapper">
             <TextField
@@ -184,7 +214,7 @@ const AddAddressModal = ({ open, setOpen }) => {
               autoFocus
               className="textfield"
               onChange={(e) => handlePinCodeChange(e)}
-              value={address.pincode}
+              value={address.vPincode}
               sx={{
                 width: "100%",
               }}
@@ -218,10 +248,10 @@ const AddAddressModal = ({ open, setOpen }) => {
               onChange={(e) =>
                 setAddress((address) => ({
                   ...address,
-                  state: e.target.value,
+                  vState: e.target.value,
                 }))
               }
-              value={address.state}
+              value={address.vState}
             />
 
             <TextField
@@ -236,10 +266,10 @@ const AddAddressModal = ({ open, setOpen }) => {
               onChange={(e) =>
                 setAddress((address) => ({
                   ...address,
-                  city: e.target.value,
+                  vCity: e.target.value,
                 }))
               }
-              value={address.city}
+              value={address.vCity}
             />
           </div>
 
@@ -255,10 +285,10 @@ const AddAddressModal = ({ open, setOpen }) => {
             onChange={(e) =>
               setAddress((address) => ({
                 ...address,
-                house: e.target.value,
+                vHouse: e.target.value,
               }))
             }
-            value={address.house}
+            value={address.vHouse}
           />
 
           <TextField
@@ -273,10 +303,10 @@ const AddAddressModal = ({ open, setOpen }) => {
             onChange={(e) =>
               setAddress((address) => ({
                 ...address,
-                area: e.target.value,
+                vArea: e.target.value,
               }))
             }
-            value={address.area}
+            value={address.vArea}
           />
 
           <FormControl

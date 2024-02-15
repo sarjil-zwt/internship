@@ -1,156 +1,149 @@
 .cartpage {
-    padding: 100px 50px;
-    width: 100%;
-    /* border: 1px solid blue; */
+  /* padding: 100px 50px; */
+  padding-top: 100px;
+  max-width: 100%;
+  padding-inline: 50px;
+  height: calc(100vh - 150px);
+  /* border: 1px solid blue; */
 }
 
-.cartpagewrapper{
-    display: flex;
-    width: 100%;
-    height: 100%;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-
+.cartpagewrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
-
-
-
 
 .cpcartitems {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    background-color: rgb(245, 245, 245);
-    border-radius: 10px 0 0 10px;
-    /* min-width: 750px; */
-    width: 100%;
-    flex:2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 10px 0 0 10px;
+  /* min-width: 750px; */
+  width: 100%;
+  flex: 2;
 
-    overflow: scroll;
-    /* border: 1px solid black; */
-    /* max-width: 800px; */
-
-
+  overflow: scroll;
+  /* border: 1px solid black; */
+  /* max-width: 800px; */
 }
 
 .cpcartitems::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
 
 .cartpagesummarydiv {
-    /* border: 1px solid red; */
-    /* width: 350px; */
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 30px;
-    align-items: center;
-    padding: 20px;
-    background-color: rgb(233, 233, 233);
-    border-radius: 0 10px 10px 0;
-
+  /* border: 1px solid red; */
+  /* width: 350px; */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 30px;
+  align-items: center;
+  padding: 20px;
+  background-color: rgb(233, 233, 233);
+  border-radius: 0 10px 10px 0;
 }
-
 
 .cpsinputdiv {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 80%;
 }
 
-.cpsinputdiv>select {
-    height: 30px;
-    cursor: pointer;
+.cpsinputdiv > select {
+  height: 30px;
+  cursor: pointer;
 }
-.cpsinputdiv>select>option{
-    
-    cursor: pointer;
+.cpsinputdiv > select > option {
+  cursor: pointer;
 }
 
 .cpsinputcpndiv {
-    display: flex;
-    /* border: 1px solid blue; */
-    width: 100%;
-    border: 1px solid gray;
+  display: flex;
+  /* border: 1px solid blue; */
+  width: 100%;
+  border: 1px solid gray;
 }
 
-.cpsinputcpndiv>input {
-    width: 100%;
-    height: 30px;
-    padding-block: 0px;
-    padding-inline: 0px;
-    border: none;
-    padding-left: 5px;
+.cpsinputcpndiv > input {
+  width: 100%;
+  height: 30px;
+  padding-block: 0px;
+  padding-inline: 0px;
+  border: none;
+  padding-left: 5px;
 }
 
-.cpsinputcpndiv>input:focus {
-    outline: none;
+.cpsinputcpndiv > input:focus {
+  outline: none;
 }
 
 .cpsapplycouponbtn {
-    border: none;
-    background: none;
-    background-color: gray;
-    padding: 0px 10px;
-    color: white;
-    cursor: pointer;
+  border: none;
+  background: none;
+  background-color: gray;
+  padding: 0px 10px;
+  color: white;
+  cursor: pointer;
 }
 
-
 .cpstotal {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
 }
 
 .cpscheckout {
-    width: 80%;
-    height: 30px;
-    background-color: black;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 80%;
+  height: 30px;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.cpscheckout:hover{
-    background-color: rgb(29, 29, 29);
+.cpscheckout:hover {
+  background-color: rgb(29, 29, 29);
 }
 
 .cpsdiscountindicatortext {
-    color: #429b6a;
-    /* background-color: white; */
-    font-size: 13px;
-    padding: 5px 20px;
-    /* border-radius: 10px; */
-    border-radius: 0 10px 10px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: fit-content;
-    background-color: white;
+  color: #429b6a;
+  /* background-color: white; */
+  font-size: 13px;
+  padding: 5px 20px;
+  /* border-radius: 10px; */
+  border-radius: 0 10px 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  background-color: white;
 }
 
 .cpsdiscountrmvbtn {
-    width: 14px;
-    height: 14px;
-    color: #B12704;
-    background-color: white;
-    border: 1px solid #B12704;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s all;
-    padding-block: 0px;
-    padding-inline: 0px;
+  width: 14px;
+  height: 14px;
+  color: #b12704;
+  background-color: white;
+  border: 1px solid #b12704;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s all;
+  padding-block: 0px;
+  padding-inline: 0px;
 }
 
 .cpsdiscountrmvbtn:hover {
-    background-color: #B12704;
-    color: white;
+  background-color: #b12704;
+  color: white;
 }

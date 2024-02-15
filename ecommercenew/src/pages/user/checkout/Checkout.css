@@ -1,72 +1,78 @@
-
-
-.checkout{
-    width: 100%;
-    /* padding: 100px; */
-    padding: 100px 50px;
-
-    
+.checkout {
+  padding-top: 100px;
+  max-width: 100%;
+  padding-inline: 50px;
+  height: calc(100vh - 150px);
 }
-.checkoutwrapper{
-    
-    display: flex;
-    width: 100%;
-    height: 100%;
-    gap: 20px;
-    background-color: rgb(245, 245, 245);
-    border-radius: 10px 0 0 10px;
+.checkoutwrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 10px 0 0 10px;
 }
 
-.addressselectwrapper{
-    width: 100%;
-    flex: 2;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
+.addressselectwrapper {
+  width: 100%;
+  flex: 2;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
 }
-.addressesradiogrp{
-    padding: 5px;
-    width: 100%;
-    /* border: 1px solid red; */
-    
-}
-
-
-.addressselect{
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.addressesradiogrp {
+  padding: 5px;
+  width: 100%;
+  /* border: 1px solid red; */
 }
 
-
-.addressselectheader{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 40px;
+.addressselect {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.ashchangebtn{
-    border: 1px solid #1976d2;
-    padding: 10px 15px;
-    font-size: 15px;
-    background-color: white;
-    cursor: pointer;
-    transition: 0.2s all;
-    color: #1976d2;
-    font-weight: 600;
+.addressselectheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
 }
 
-.ashchangebtn:hover{
-    background-color: #1976d2;
-    color: white;
+.cpaddressbuttons {
+  display: flex;
+  gap: 20px;
 }
 
-.checkoutpaymentelements{
-    width: 100%;
-    height: 100%;
-    border: 1px solid green;
+.ashchangebtn {
+  border: 1px solid #1976d2;
+  padding: 10px 15px;
+  font-size: 15px;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.2s all;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.ashchangebtn:hover {
+  background-color: #1976d2;
+  color: white;
+}
+
+.checkoutpaymentelements {
+  width: 100%;
+  height: 100%;
+  border: 1px solid green;
+}
+
+.cardcredentials {
+  position: absolute;
+  right: 50px;
+  background-color: white;
+  width: 200px;
+  bottom: 100px;
 }

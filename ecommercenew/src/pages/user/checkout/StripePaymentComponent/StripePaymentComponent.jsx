@@ -2,18 +2,18 @@ import {
   CardCvcElement,
   CardExpiryElement,
   CardNumberElement,
-  PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Loader from "../../../../components/loader/Loader";
 import { CreditCard, Event, VpnKey } from "@mui/icons-material";
 import axios from "axios";
 import toast from "react-hot-toast";
 import "./StripePaymentComponent.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setCartState } from "../../../../redux/features/cartSlice";
 
 const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
   const stripe = useStripe();
@@ -22,11 +22,10 @@ const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
   const [isLoading, setIsLoading] = useState(false);
   const cartState = useSelector((state) => state.cartState);
   const navigate = useNavigate();
-
-  const [message, setMessage] = useState(null);
+  const dispatch = useDispatch();
 
   const paymentData = {
-    amount: Math.round(cartState.cart.total * 100),
+    amount: Math.round(cartState.cart.fTotal * 100),
   };
 
   const handleSubmit = async (e) => {
@@ -64,29 +63,29 @@ const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
         payment_method: {
           card: elements.getElement(CardNumberElement),
           billing_details: {
-            name: billingAddress.fullname,
-            phone: billingAddress.phone,
+            name: billingAddress.vFirstname + billingAddress.vLastname,
+            phone: billingAddress.vPhone,
             address: {
-              line1: billingAddress.house,
-              line2: billingAddress.area,
+              line1: billingAddress.vHouse,
+              line2: billingAddress.vArea,
 
-              city: billingAddress.city,
-              state: billingAddress.state,
-              postal_code: billingAddress.pincode,
+              city: billingAddress.vCity,
+              state: billingAddress.vState,
+              postal_code: billingAddress.vPincode,
               country: "IN",
             },
           },
         },
         shipping: {
-          name: shippingAddress.fullname,
-          phone: billingAddress.phone,
+          name: shippingAddress.vFirstname + shippingAddress.vLastname,
+          phone: shippingAddress.vPhone,
           address: {
-            line1: billingAddress.house,
-            line2: billingAddress.area,
+            line1: shippingAddress.vHouse,
+            line2: shippingAddress.vArea,
 
-            city: billingAddress.city,
-            state: billingAddress.state,
-            postal_code: billingAddress.pincode,
+            city: shippingAddress.vCity,
+            state: shippingAddress.vState,
+            postal_code: shippingAddress.vPincode,
             country: "IN",
           },
         },
@@ -96,18 +95,21 @@ const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
         await axios
           .post("/orders", {
             cart: cartState.cart,
-            shippingAddress: shippingAddress.id,
-            billingAddress: billingAddress.id,
-            paymentId: result.paymentIntent.id,
-            paymentStatus: result.paymentIntent.status,
+            iShippingAddress: shippingAddress.id,
+            iBillingAddress: billingAddress.id,
+            vPaymentId: result.paymentIntent.id,
+            vPaymentStatus: result.paymentIntent.status,
           })
           .then((res) => {
             toast.success(res.data.message);
+            console.log(res.data.cart);
+            dispatch(setCartState(res.data.cart));
           })
           .catch((err) => {
             toast.error(err.response.data.message);
           });
         toast.success("Payment Successfull");
+
         sessionStorage.setItem("payment", JSON.stringify(result.paymentIntent));
         navigate("/paymentsuccess");
       } else {
@@ -161,8 +163,6 @@ const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
         >
           Pay now
         </button>
-        {/* Show any error or success messages */}
-        {message && <div id="payment-message">{message}</div>}
       </form>
     </div>
   );

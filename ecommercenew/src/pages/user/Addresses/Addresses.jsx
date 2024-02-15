@@ -7,11 +7,14 @@ import AddressCard from "./AddressCard/AddressCard";
 import axios from "axios";
 import { setAddressesState } from "../../../redux/features/addressSlice";
 import toast from "react-hot-toast";
+import { useSearchParams } from "react-router-dom";
 
 const Addresses = () => {
   const [addressModal, setAddressModal] = useState(false);
   const { addresses } = useSelector((state) => state.addressState);
   const dispatch = useDispatch();
+  const [searchparams] = useSearchParams();
+
   useEffect(() => {
     axios
       .get("/addresses")
@@ -22,6 +25,12 @@ const Addresses = () => {
         console.log(err);
         toast.error(err.response.data.message || "Something went wrong");
       });
+
+    if (searchparams.get("open")) {
+      setAddressModal(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

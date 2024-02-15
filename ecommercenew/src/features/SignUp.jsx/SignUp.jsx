@@ -1,13 +1,9 @@
-import { LockOutlined } from "@mui/icons-material";
 import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  CssBaseline,
-  TextField,
-  Typography,
-} from "@mui/material";
+  CloseFullscreen,
+  CloudUpload,
+  LockOutlined,
+} from "@mui/icons-material";
+import { Avatar, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -16,129 +12,177 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
 import toast from "react-hot-toast";
 import "./SignUp.css";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  // const handleSubmit = async () => {
+  //   setLoading(true);
 
-    console.log(image);
-    const formData = new FormData();
+  //   console.log(image);
+  //   const formData = new FormData();
 
-    formData.append("vName", name);
-    formData.append("vEmail", email);
-    formData.append("vPassword", password);
-    formData.append("vImage", image);
+  //   formData.append("vName", name);
+  //   formData.append("vEmail", email);
+  //   formData.append("vPassword", password);
+  //   formData.append("vImage", image);
 
-    // console.log(formData);
+  //   // console.log(formData);
 
-    try {
-      const res = await axios.post(`/auth/signup`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(res.data);
-      dispatch(login(res.data));
-      localStorage.setItem("token", res.data.token);
-      toast.success("Registration Successful");
-      navigate("/");
-    } catch (err) {
-      toast.error(err.response.data.message);
-    } finally {
-      setLoading(false);
+  // };
+
+  const LoginSchema = Yup.object().shape({
+    vName: Yup.string().required("Name is required"),
+    vEmail: Yup.string()
+      .email("Invalid email address format")
+      .required("Email is required"),
+    vPassword: Yup.string()
+      .required("Password is required!")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+      ),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      vEmail: "",
+      vPassword: "",
+      vName: "",
+      vImage: "",
+      imagePreview: "",
+    },
+    validationSchema: LoginSchema,
+    onSubmit: async (values, { setSubmitting, setStatus }) => {
+      setSubmitting(true);
+
+      try {
+        const res = await axios.post(`/auth/signup`, formik.values, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        dispatch(login(res.data));
+        localStorage.setItem("token", res.data.token);
+        toast.success("Registration Successful");
+        navigate("/");
+      } catch (err) {
+        toast.error(err.response.data.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  const handleImagePreview = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("imagePreview", reader.result);
+      };
+      reader.readAsDataURL(file);
+      formik.setFieldValue("vImage", file);
     }
   };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
   return (
-    <div className="login">
+    <div className="signup">
       {loading && <Loader />}
-      <Container
-        component="main"
-        maxWidth="xs"
-        sx={{
-          margin: 0,
-        }}
-      >
-        <CssBaseline />
-        <Box
-          sx={{
-            // marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlined />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+      <div className="signupcontentwrapper">
+        <div className="signupheading">
+          <Avatar className="previewimage" src={formik.values.imagePreview} />
+          <Typography
+            variant="h3"
+            sx={{
+              color: "#1976d2",
+            }}
+          >
+            Sign up
           </Typography>
-          <Box noValidate sx={{ mt: 1 }}>
+        </div>
+        <form onSubmit={formik.handleSubmit} noValidate className="customform">
+          <TextField
+            error={formik.errors.vName && formik.touched.vName ? true : false}
+            fullWidth
+            id="outlined-error-helper-text"
+            label="Name"
+            helperText={
+              formik.errors.vName && formik.touched.vName
+                ? formik.errors.vName
+                : " "
+            }
+            name="vName"
+            onChange={formik.handleChange}
+            value={formik.values.vName}
+            className="customtextfield"
+          />
+          <TextField
+            error={formik.errors.vEmail ? true : false}
+            fullWidth
+            id="outlined-error-helper-text"
+            label="Email"
+            helperText={
+              formik.errors.vEmail && formik.touched.vEmail
+                ? formik.errors.vEmail
+                : " "
+            }
+            name="vEmail"
+            onChange={formik.handleChange}
+            value={formik.values.vEmail}
+          />
+          <TextField
+            error={formik.errors.vPassword ? true : false}
+            fullWidth
+            id="outlined-error-helper-text"
+            label="Password"
+            helperText={
+              formik.errors.vPassword && formik.touched.vPassword
+                ? formik.errors.vPassword
+                : " "
+            }
+            name="vPassword"
+            onChange={formik.handleChange}
+            value={formik.values.vPassword}
+          />
+
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUpload />}
+            fullWidth
+            sx={{
+              mb: 2,
+            }}
+          >
+            Profile Picture
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="name"
-              label="name"
-              name="name"
-              autoComplete="name"
-              autoFocus
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
+              sx={{
+                clip: "rect(0 0 0 0)",
+                clipPath: "inset(50%)",
+                height: 1,
+                overflow: "hidden",
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                whiteSpace: "nowrap",
+                width: 1,
+              }}
               type="file"
               name="vImage"
-              src={image}
-              onChange={handleImageChange}
-              alt=""
+              onChange={(e) => handleImagePreview(e)}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={(e) => handleSubmit(e)}
-            >
-              Sign In
-            </Button>
-          </Box>
-        </Box>
-      </Container>
+          </Button>
+          <Button variant="contained" type="submit" tabIndex={-1} fullWidth>
+            Sign Up
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };

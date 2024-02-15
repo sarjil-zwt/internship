@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from "react";
 import "./CartProductCard.css";
 import { useDispatch } from "react-redux";
-import {
-  removeFromCart,
-  setCartState,
-  setQuantityOfCartProduct,
-} from "../../../redux/features/cartSlice";
+import { setCartState } from "../../../redux/features/cartSlice";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Delete } from "@mui/icons-material";
 
 const CartProductCard = ({ item }) => {
-  const [quantity, setQuantity] = useState(item.quantity);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    handleChange();
-  }, [quantity]);
+  // useEffect(() => {
+  //   handleChange();
 
-  const handleChange = async () => {
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [quantity]);
+
+  const handleChange = async (quantity) => {
     await axios
       .put("/cart/product/setquantity", {
-        product: item.Product.id,
-        quantity,
+        iProductId: item.Product.id,
+        iQuantity: quantity,
       })
       .then((res) => {
         dispatch(setCartState({ ...res.data.cart }));
@@ -53,34 +50,34 @@ const CartProductCard = ({ item }) => {
   return (
     <div className="cartcard">
       <div className="ccimgwrapper">
-        <img src={item.Product.image} className="ccimage" alt="" />
+        <img src={item.Product.vImage} className="ccimage" alt="" />
       </div>
 
       <div className="ccdetails">
         <Link to={`/product/${item.Product.id}`}>
-          <p className="title">{item.Product.title}</p>
+          <p className="title">{item.Product.vTitle}</p>
         </Link>
-        <p className="ccprice">₹{item.Product.price}</p>
+        <p className="ccprice">₹{item.Product.fPrice}</p>
       </div>
 
       <div className="ccbuttons">
         <button
           className="ccquantitybtn"
-          disabled={quantity <= 1}
-          onClick={(e) => setQuantity((q) => q - 1)}
+          disabled={item.iQuantity <= 1}
+          onClick={() => handleChange(item.iQuantity - 1)}
         >
           -
         </button>
         <input
           type="number"
           className="ccquantityinp"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          value={item.iQuantity}
+          onChange={(e) => handleChange(e.target.value)}
           id=""
         />
         <button
           className="ccquantitybtn"
-          onClick={(e) => setQuantity((q) => q + 1)}
+          onClick={() => handleChange(item.iQuantity + 1)}
         >
           +
         </button>
