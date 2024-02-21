@@ -29,7 +29,7 @@ const AddAddressModal = ({ open, setOpen }) => {
     vCity: "",
     vHouse: "",
     vArea: "",
-    eAddressType: "HOME",
+    eAddressType: "Home",
   });
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -114,7 +114,7 @@ const AddAddressModal = ({ open, setOpen }) => {
           vCity: "",
           vHouse: "",
           vArea: "",
-          addresstype: "",
+          eAddresstype: "HOME",
         });
 
         if (searchparams.get("redirect")) {
@@ -327,10 +327,10 @@ const AddAddressModal = ({ open, setOpen }) => {
               onChange={(e) =>
                 setAddress((address) => ({
                   ...address,
-                  addresstype: e.target.value,
+                  eAddressType: e.target.value,
                 }))
               }
-              value={address.addresstype}
+              value={address.eAddressType}
               row
               sx={{
                 display: "flex",

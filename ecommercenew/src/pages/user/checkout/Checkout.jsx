@@ -144,7 +144,7 @@ const Checkout = () => {
                 >
                   Add Address
                 </button>
-                {addressState.addresses.length >= 2 && (
+                {addressState?.addresses?.length >= 2 && (
                   <button
                     onClick={() => handleMenuOpen(1)}
                     className="ashchangebtn"
@@ -172,14 +172,18 @@ const Checkout = () => {
               {!sameAsShipping && (
                 <div className="cpaddressbuttons">
                   <button
-                    onClick={() => handleMenuOpen(1)}
+                    onClick={() => {
+                      navigate(
+                        "/profile/addresses?redirect=profile/checkout&open=true"
+                      );
+                    }}
                     className="ashchangebtn"
                   >
                     Add Address
                   </button>
                   {addressState.addresses.length >= 2 && (
                     <button
-                      onClick={() => handleMenuOpen(1)}
+                      onClick={() => handleMenuOpen(2)}
                       className="ashchangebtn"
                     >
                       Change Address

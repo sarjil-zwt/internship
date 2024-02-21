@@ -51,7 +51,6 @@ const AllProducts = () => {
         setLoadingMore(false);
       });
 
-    console.log(searchParams.get("subcategory"), "sub cat");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, pageNo]);
 

@@ -68,11 +68,11 @@ const ReviewCard = ({ review }) => {
             defaultValue={review.fRating}
           />
           <p className="">{review.fRating}/5</p>
-          {review.tagline && (
+          {review.vTagline && (
             <p className="rcbratingdisplaytagline">- {review.vTagline}</p>
           )}
         </div>
-        <p>{review.vReview}</p>
+        <p className="rcreview">{review.vReview}</p>
       </div>
     </div>
   );

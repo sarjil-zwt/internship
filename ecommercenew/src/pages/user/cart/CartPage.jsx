@@ -127,33 +127,25 @@ const CartPage = () => {
         {cart?.CartItems?.length > 0 ? (
           <div className="cartpagesummarydiv">
             <h3 className="cpsummarytitle">Summary</h3>
-            <hr />
 
             <div className="cpstotal">
               <p className="cpstotalitem">Items {cart?.CartItems?.length}</p>
+              <p className="cpstotalamount">
+                ₹{cart?.fTotal?.toFixed(2) - cart?.fTotalTax?.toFixed(2)}
+              </p>
+            </div>
+            <div className="cpstotal">
+              <p className="cpstotalitem">Tax - </p>
+              <p className="cpstotalamount">₹{cart?.fTotalTax?.toFixed(2)}</p>
+            </div>
+            <hr />
+            <div className="cpstotal">
+              <p className="cpstotalitem">Total - </p>
               <p className="cpstotalamount">₹{cart?.fTotal?.toFixed(2)}</p>
             </div>
 
             <div className="cpsinputdiv">
-              <label htmlFor="">Shipping</label>
-              <select
-                name="shipping"
-                id=""
-                onChange={(e) => handleShippingChange(e)}
-                value={cart.iShippingTypeId}
-              >
-                {shippingTypes.map((st) => {
-                  return (
-                    <option value={st.id} key={st.id}>
-                      {st.vName} - ₹{st.fCharge}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            <div className="cpsinputdiv">
-              <label htmlFor="">Coupon Code</label>
+              <label htmlFor="">Coupon Code ( Optional )</label>
               <div className="cpsinputcpndiv">
                 <input
                   type="text"
@@ -170,7 +162,8 @@ const CartPage = () => {
               </div>
               {cart.fDiscount > 0 ? (
                 <p className="cpsdiscountindicatortext">
-                  Discount code added - {cart.fDiscount}%{" "}
+                  Discount code added - {cart.fDiscount}% ( ₹
+                  {((cart.fDiscount * cart.fTotal) / 100).toFixed(2)} )
                   <Delete
                     onClick={handleRemoveDiscount}
                     sx={{
@@ -190,10 +183,27 @@ const CartPage = () => {
                 ""
               )}
             </div>
-
+            <div className="cpsinputdiv">
+              <label htmlFor="">Shipping</label>
+              <select
+                name="shipping"
+                id=""
+                onChange={(e) => handleShippingChange(e)}
+                value={cart.iShippingTypeId}
+              >
+                {shippingTypes.map((st) => {
+                  return (
+                    <option value={st.id} key={st.id}>
+                      {st.vName} - ₹{st.fCharge}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <hr />
             <div className="cpstotal">
-              <p className="cpstotalitem">TOTAL PRICE</p>
-              <p className="cpstotalamount">₹{cart.fTotal}</p>
+              <p className="cpstotalitem">GRAND TOTAL</p>
+              <p className="cpstotalamount">₹{cart.fGrandTotal}</p>
             </div>
 
             <Link to="/profile/checkout" className="cpscheckout">

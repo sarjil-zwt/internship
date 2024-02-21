@@ -6,10 +6,7 @@ import bird from "./bird.json";
 
 const Loader = ({ size, position }) => {
   return (
-    <div
-      className="loader"
-      style={{ position: position ? position : "absolute" }}
-    >
+    <div className="loader" style={{ position: position ? position : "fixed" }}>
       <Lottie animationData={bird} height="50px" className="loaderbird" />
       {/* <CircularProgress size={size} /> */}
     </div>

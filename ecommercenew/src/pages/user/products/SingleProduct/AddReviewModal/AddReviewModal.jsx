@@ -39,6 +39,7 @@ const AddReviewModal = ({ open, setOpen, pId }) => {
   }, [open]);
 
   const handleSubmit = async () => {
+    console.log(review);
     axios
       .post(`/reviews`, { ...review, iProductId: pId })
       .then((res) => {

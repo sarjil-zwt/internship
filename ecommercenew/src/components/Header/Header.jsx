@@ -37,8 +37,6 @@ const Header = () => {
     setCategoriesOpen(false);
   }, [location.pathname]);
 
-  console.log(userState?.userState?.vImage);
-  const image = userState?.userState?.vImage;
   return (
     <header className="header">
       <div className="headerleft">
@@ -80,7 +78,7 @@ const Header = () => {
               <div className="floatingcategorieslistdivinnner">
                 {content?.Categories?.map((c) => {
                   return (
-                    <div className="contentcategorydiv">
+                    <div className="contentcategorydiv" key={c.id}>
                       <Link
                         to={`/products?category=${c.id}`}
                         className="contentcategory"
@@ -90,6 +88,7 @@ const Header = () => {
                       {c.SubCategories.map((sc) => {
                         return (
                           <Link
+                            key={sc.id}
                             to={`/products?category=${c.id}&subcategory=${sc.id}`}
                             className="contentsubcategory"
                           >

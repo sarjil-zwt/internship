@@ -21,21 +21,23 @@ const ProductCard = ({ product }) => {
         style={{ backgroundImage: `url(${product.vImage})` }}
       >
         {/* <img className='productcardimg' src={product.image} alt="" /> */}
-        <div className="pcratings">
-          <p className="pcrate">{product?.rating?.rate}</p>
+        {product?.Reviews?.length > 0 && (
+          <div className="pcratings">
+            <p className="pcrate">{product?.fRatings?.toFixed(2)}</p>
 
-          <Star
-            sx={{
-              color: "#14958f",
-              margin: 0,
-              fontSize: "20px",
-            }}
-          />
+            <Star
+              sx={{
+                color: "#14958f",
+                margin: 0,
+                fontSize: "20px",
+              }}
+            />
 
-          <p className="pcproductsaperator">|</p>
+            <p className="pcproductsaperator">|</p>
 
-          <p className="pccount">{product?.rating?.count}</p>
-        </div>
+            <p className="pccount">{product?.Reviews?.length}</p>
+          </div>
+        )}
       </div>
 
       <p className="pctitle">{product?.vTitle}</p>

@@ -44,8 +44,10 @@ const AddressCard = ({ address }) => {
       {loading && <Loader />}
       <div className="addresscardheader">
         <div className="achdetails">
-          <p className="achname">{address.fullname}</p>
-          <p className="achaddresstype">{address.addresstype}</p>
+          <p className="achname">
+            {address.vFirstname} {address.vLastName}
+          </p>
+          <p className="achaddresstype">{address.eAddressType}</p>
         </div>
         <div>
           <IconButton
@@ -102,12 +104,12 @@ const AddressCard = ({ address }) => {
       </div>
       <div className="addresscardbody">
         <p className="acbp">
-          {address.house},{address.area},{address.city},{address.state}-
-          {address.pincode}
+          {address.vHouse},{address.vArea},{address.vCity},{address.vState}-
+          {address.vPincode}
         </p>
       </div>
       <div className="addresscardfooter">
-        <p className="acfphone">{address.phone}</p>
+        <p className="acfphone">{address.vPhone}</p>
       </div>
     </div>
   );

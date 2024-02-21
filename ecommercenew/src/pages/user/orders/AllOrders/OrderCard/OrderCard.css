@@ -1,0 +1,40 @@
+.ordercard {
+  display: flex;
+  align-items: center;
+  /* border: 1px solid red; */
+  min-height: 150px;
+  padding: 0 50px;
+  gap: 100px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.ordercardimagediv {
+  min-height: 100px;
+  min-width: 100px;
+}
+.ordercardimage {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.ordercarddetails {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 50px;
+  align-items: center;
+}
+
+.ocdproductlist {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.totoaldisplay > p {
+  text-decoration: underline;
+}

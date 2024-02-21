@@ -11,7 +11,6 @@ export const userStateSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log(state.isLoggedIn, "[][][][===============");
       state.isLoggedIn = true;
       // localStorage.setItem("isLogged");
       state.userState = action.payload.user;

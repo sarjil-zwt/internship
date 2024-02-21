@@ -21,6 +21,8 @@ import SingleProduct from "../pages/user/products/SingleProduct/SingleProduct";
 import AllUser from "../pages/admin/users/AllUsers";
 import { Route, Routes } from "react-router-dom";
 import "./AllRoutes.css";
+import AllOrders from "../pages/user/orders/AllOrders/AllOrders";
+import SingleOrder from "../pages/user/orders/SingleOrder/SingleOrder";
 
 const AllRoutes = ({ loading }) => {
   return (
@@ -55,6 +57,10 @@ const AllRoutes = ({ loading }) => {
             <Route path="addresses" element={<Addresses />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="orders/" element={<AllOrders />} />
+            <Route path="orders/">
+              <Route path=":id" element={<SingleOrder />} />
+            </Route>
           </Route>
         </Route>
 

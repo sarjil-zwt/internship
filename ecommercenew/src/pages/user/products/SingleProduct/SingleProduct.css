@@ -6,7 +6,7 @@
   /* flex-direction: column; */
   align-items: flex-start;
   /* border: 1px solid red; */
-  max-width: 100%;
+  max-width: 100vw;
   /* border: 1px solid red; */
   height: 100%;
   /* gap: 100px; */
@@ -35,11 +35,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50%;
-  /* border: 1px solid black; */
-  height: calc(100%-80px);
+  /* height: 600px; Set a fixed height */
   position: sticky;
-  top: 0; /* Make the image stick to the top of its container */
+  top: 0;
   flex: 1;
   min-height: 100vh;
 }
@@ -56,7 +54,7 @@
 }
 
 .spdetailsdiv {
-  /* width: 50%; */
+  /* width: 60%; */
   /* border: 1px solid blue; */
   /* height: calc(100% - 70px); */
   flex: 1.5;

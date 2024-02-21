@@ -14,6 +14,7 @@ import "./StripePaymentComponent.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCartState } from "../../../../redux/features/cartSlice";
+import { setOrdersState } from "../../../../redux/features/orderSlice";
 
 const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
   const stripe = useStripe();
@@ -25,7 +26,7 @@ const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
   const dispatch = useDispatch();
 
   const paymentData = {
-    amount: Math.round(cartState.cart.fTotal * 100),
+    amount: Math.round(cartState.cart.fGrandTotal * 100),
   };
 
   const handleSubmit = async (e) => {
@@ -104,6 +105,7 @@ const StripePaymentComponent = ({ shippingAddress, billingAddress }) => {
             toast.success(res.data.message);
             console.log(res.data.cart);
             dispatch(setCartState(res.data.cart));
+            dispatch(setOrdersState(res.data.orders));
           })
           .catch((err) => {
             toast.error(err.response.data.message);
